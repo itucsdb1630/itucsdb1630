@@ -3,6 +3,6 @@ applications:
   host: lightmdb
   name: lightmdb
   path: .
-  domain: lightmdb.org
+  domain: mybluemix.net
   instances: 1
   memory: 128M
