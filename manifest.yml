@@ -1,8 +1,8 @@
 applications:
 - disk_quota: 1024M
-  host: itucsdb15
-  name: itucsdb15
+  host: lightmdb
+  name: lightmdb
   path: .
-  domain: mybluemix.net
+  domain: lightmdb.org
   instances: 1
   memory: 128M
