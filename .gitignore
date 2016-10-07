@@ -12,12 +12,14 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+.env/
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+.idea/
 lib/
 lib64/
 parts/
