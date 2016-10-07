@@ -35,11 +35,11 @@ def get_elephantsql_dsn(vcap_services):
 # example json:
 # {
 #   "credentials": {
-#     "user": "them",
-#     "password": "pardus9",
+#     "user": "test",
+#     "password": "test",
 #     "host": "localhost",
 #     "port": "5432",
-#     "dbname": "itucsdb2017"
+#     "dbname": "databaseName"
 #   }
 # }
 #
