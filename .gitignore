@@ -65,5 +65,8 @@ target/
 # Vagrant
 .vagrant/
 
-#credentials
+# Credentials
 credentials.json
+
+# Certification
+/cert/
