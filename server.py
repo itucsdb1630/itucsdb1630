@@ -44,7 +44,7 @@ if __name__ == '__main__':
             with open('credentials.json', 'r') as f:
                 parsed = json.load(f)
                 dsn = "user='{}' password='{}' host='{}' port={} dbname='{}'".format(
-                    parsed['user'], parsed['password'], parsed['port'], parsed['dbname']
+                    parsed['user'], parsed['password'], parsed['host'], parsed['port'], parsed['dbname']
                 )
         except FileNotFoundError:
             dsn = "user='vagrant' password='vagrant' host='localhost' port=54321 dbname='itucsdb'"
