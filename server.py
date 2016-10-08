@@ -35,19 +35,19 @@ if __name__ == '__main__':
     else:
         port, debug = 5000, True
 
-    VCAP_SERVICES = os.getenv('VCAP_SERVICES')
-    dsn = None
-    if VCAP_SERVICES is not None:
-        dsn = get_elephantsql_dsn(VCAP_SERVICES)
-    else:
-        try:
-            with open('credentials.json', 'r') as f:
-                parsed = json.load(f)
-                dsn = "user='{}' password='{}' host='{}' port={} dbname='{}'".format(
-                    parsed['user'], parsed['password'], parsed['host'], parsed['port'], parsed['dbname']
-                )
-        except FileNotFoundError:
-            dsn = "user='vagrant' password='vagrant' host='localhost' port=54321 dbname='itucsdb'"
-    app.config['dsn'] = dsn
+    # VCAP_SERVICES = os.getenv('VCAP_SERVICES')
+    # dsn = None
+    # if VCAP_SERVICES is not None:
+    #     dsn = get_elephantsql_dsn(VCAP_SERVICES)
+    # else:
+    #     try:
+    #         with open('credentials.json', 'r') as f:
+    #             parsed = json.load(f)
+    #             dsn = "user='{}' password='{}' host='{}' port={} dbname='{}'".format(
+    #                 parsed['user'], parsed['password'], parsed['host'], parsed['port'], parsed['dbname']
+    #             )
+    #     except FileNotFoundError:
+    #         dsn = "user='vagrant' password='vagrant' host='localhost' port=54321 dbname='itucsdb'"
+    # app.config['dsn'] = dsn
 
     app.run(host='127.0.0.1', port=port, debug=debug)
