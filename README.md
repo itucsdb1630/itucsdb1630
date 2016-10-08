@@ -16,4 +16,4 @@ License
 -------
 This software is licensed under the
 [GPLv3](http://creativecommons.org/licenses/BSD/). For more
-information, read [LICENSE.md].
+information, read [LICENSE] file.
