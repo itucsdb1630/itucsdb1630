@@ -35,11 +35,11 @@ if __name__ == '__main__':
     else:
         port, debug = 5000, True
 
-    VCAP_SERVICES = os.getenv('VCAP_SERVICES')
+    VCAP_SERVICES = os.getenv('VCAP_Services')
+    dsn = None
     if VCAP_SERVICES is not None:
-        app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
+        dsn = get_elephantsql_dsn(VCAP_SERVICES)
     else:
-        dsn = None
         try:
             with open('credentials.json', 'r') as f:
                 parsed = json.load(f)
@@ -48,6 +48,6 @@ if __name__ == '__main__':
                 )
         except FileNotFoundError:
             dsn = "user='vagrant' password='vagrant' host='localhost' port=54321 dbname='itucsdb'"
-        app.config['dsn'] = dsn
+    app.config['dsn'] = dsn
 
     app.run(host='127.0.0.1', port=port, debug=debug)
