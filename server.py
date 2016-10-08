@@ -35,7 +35,7 @@ if __name__ == '__main__':
     else:
         port, debug = 5000, True
 
-    VCAP_SERVICES = os.getenv('VCAP_Services')
+    VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     dsn = None
     if VCAP_SERVICES is not None:
         dsn = get_elephantsql_dsn(VCAP_SERVICES)
