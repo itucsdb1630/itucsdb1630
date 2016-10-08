@@ -1,7 +1,5 @@
 applications:
-# - services:
-#   - ElephantSQL-db
-  disk_quota: 1024M
+- disk_quota: 1024M
   host: lightmdb
   name: lightmdb
   path: .
