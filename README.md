@@ -15,5 +15,5 @@ It is also available on [lightmdb.readthedocs.io](https://lightmdb.readthedocs.i
 License
 -------
 This software is licensed under the
-[GPLv3](http://creativecommons.org/licenses/BSD/). For more
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.html). For more
 information, read [LICENSE] file.
