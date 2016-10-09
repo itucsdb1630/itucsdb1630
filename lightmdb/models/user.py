@@ -48,6 +48,9 @@ class User(object):
     def filter(self, db, **kwargs):
         return None
 
+    def delete(self, db):
+        raise NotImplemented
+
     def save(self, db):
         self.check_data()
         user = self.filter(db, username=self.username)
