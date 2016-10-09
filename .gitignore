@@ -67,7 +67,7 @@ target/
 .vagrant/
 
 # Credentials
-credentials.json
+local_settings.py
 
 # Certification
 /cert/

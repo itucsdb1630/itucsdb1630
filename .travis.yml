@@ -1,0 +1,11 @@
+dist: trusty
+language: python
+python:
+  - "3.5"
+services:
+  - postgresql
+install:
+  - pip install -r requirements.txt
+before_script:
+  - psql -c 'create database lightmdb_test;' -U postgres
+script: python tests.py
