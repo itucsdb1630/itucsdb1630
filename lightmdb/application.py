@@ -41,7 +41,7 @@ def create_app(config=None):
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     # Set configuration
     if VCAP_SERVICES:
-        _configure_prod(app, VCAP_APP_PORT, VCAP_SERVICES)
+        _configure_prod(app, VCAP_SERVICES)
     elif os.getenv('CI_TESTS'):
         _configure_test(app)
     else:
@@ -81,7 +81,7 @@ def _get_elephantsql_dsn(vcap_services):
     return dsn
 
 
-def _configure_prod(app, port, configuration):
+def _configure_prod(app, configuration):
     """Production Configurations."""
     app.config['DEBUG'] = False
     app.config['dsn'] = _get_elephantsql_dsn(configuration)
