@@ -18,7 +18,7 @@ except ImportError as e:
     settings = None
 
 
-__all__ = ['create_app', 'get_db']
+__all__ = ['create_app', 'get_db', 'init_db', ]
 
 DEFAULT_APP_NAME = 'lightmdb'
 DEFAULT_APP_SECRET = 'Secret@LightMDB'
@@ -57,6 +57,14 @@ def create_app(config=None):
     for view, url_prefix in DEFAULT_BLUEPRINTS:
         app.register_blueprint(view, url_prefix=url_prefix)
     return app
+
+
+def init_db(app):
+    """Initializes the database."""
+    db = get_db(app)
+    with app.open_resource('schema.sql', mode='r') as f:
+        db.cursor.execute(f.read())
+    db.commit()
 
 
 def get_db(app):

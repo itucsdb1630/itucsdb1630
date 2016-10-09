@@ -1,12 +1,13 @@
 import os
-from lightmdb import create_app, get_db
+from lightmdb import create_app, get_db, init_db
 import unittest
 
 class LightmdbTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
         self.db = None
-        # self.tests = db.cursor.execute()
+        with self.app.app_context():
+            init_db(self.app)
 
     def tearDown(self):
         if self.db:
