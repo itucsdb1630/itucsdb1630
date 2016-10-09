@@ -37,6 +37,7 @@ def create_app(config=None):
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', DEFAULT_APP_SECRET)
     app.config['SESSION_COOKIE_NAME'] = 'Ssession'
     app.config['PERMANENT_SESSION_LIFETIME'] = 2678400  # seconds
+    app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['username', 'email']
     # Get environment variables
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     # Set configuration

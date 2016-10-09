@@ -1,5 +1,6 @@
 Flask
 Flask-Script
 psycopg2
+flask-security
 raven
 blinker
