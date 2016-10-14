@@ -1,43 +1,59 @@
-"""User Models."""
+from flask import current_app
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
-class Role(object):
-    """User Role for Permissions."""
-    def __init__(self, name=None, description=None):
-        self.name = name
-        self.description = description
-    
-    def get(db, pk):
-        db.cursor.execute("SELECT * FROM role WHERE id={pk}", {'pk':pk})
-        return db.fetch_execution()
 
-class User(object):
+def get_database():
+    from lightmdb import get_db
+    return get_db(current_app)
+
+
+class User(UserMixin):
     """User Model."""
-    def __init__(self, pk=None, username=None, email=None, password=None, name=None,
-                 active=True, confirmed_at=None, roles=[], is_staff=False):
+    def __init__(self, pk=None, username=None, password=None, email=None, name=None,
+                 confirmed_at=None, is_staff=False):
         self.pk = pk
         self.username = username
+        self.password = password
         self.email = email
         self.name = name
-        self.active = active
         self.confirmed_at = confirmed_at
-        self.roles = roles
         self.is_staff = is_staff
-        self.password = password
+        if not self.pk and self.password:
+            # new user
+            self.set_password()
 
-    def check_data(self):
-        """Check if all required data presents."""
-        pass
+    def __repr__(self):
+        return self.username
 
-    def set_password(self, password):
+    def get_id(self):
+        return str(self.pk)
+
+    def set_password(self, password=None):
         """Make password hash."""
-        self.password = password
-    
-    def get(self, db, pk=None, username=None):
+        if password:
+            self.password = password
+        self.password = generate_password_hash(self.password)
+
+    def check_password(self, password):
+        """Check password match with hash."""
+        return check_password_hash(self.password, password)
+
+    @staticmethod
+    def get(pk=None, username=None, email=None):
+        """Get user by identifier.
+
+        Usage: User.get(user_id)
+        :rtype: User object or None
+        """
+        db = get_database()
         cursor = db.cursor
         if pk:
-            cursor.execute("SELECT * FROM users WHERE id=%(pk)s", {'pk': pk})
+            cursor.execute("SELECT * FROM users WHERE id=%(id)s", {'id': pk})
         elif username:
             cursor.execute("SELECT * FROM users WHERE username=%(username)s", {'username': username})
+        elif email:
+            cursor.execute("SELECT * FROM users WHERE email=%(email)s", {'email': email})
         else:
             return None
         user = db.fetch_execution(cursor)
@@ -45,38 +61,47 @@ class User(object):
             return User(**user[0])
         return None
 
-    def filter(self, db, **kwargs):
-        return None
+    @staticmethod
+    def filter(**kwargs):
+        db = get_database()
+        cursor = db.cursor
+        query = "SELECT * FROM users"
+        if kwargs:
+            pass
+        return []
 
-    def delete(self, db):
-        raise NotImplemented
+    def delete(self):
+        if not self.pk:
+            raise ValueError("User is not saved yet.")
+        db = get_database()
+        cursor = db.cursor
+        query = "DELETE FROM users where id=%(id)s"
+        cursor.execute(query, {'id': self.pk})
+        db.commit()
 
-    def save(self, db):
-        self.check_data()
-        user = self.filter(db, username=self.username)
+    def save(self):
+        db = get_database()
+        user = self.filter(username=self.username)
         if user:
             # update
             # @TODO
             raise NotImplemented
-            return self.get(db, username=self.username)
+            return self.get(username=self.username)
             # new
         data = {
             'username': self.username,
             'email': self.email,
             'name': self.name,
-            'active': self.active,
             'confirmed_at': self.confirmed_at,
             'is_staff': self.is_staff,
             'password': self.password
         }
         query = "INSERT INTO users " \
-                "(username, email, name, active, confirmed_at, is_staff, password) " \
+                "(username, email, name, confirmed_at, is_staff, password) " \
                 "VALUES" \
-                "(%(username)s, %(email)s, %(name)s, %(active)s, %(confirmed_at)s, " \
+                "(%(username)s, %(email)s, %(name)s, %(confirmed_at)s, " \
                 "%(is_staff)s, %(password)s)"
 
-        print(query)
         db.cursor.execute(query, data)
         db.commit()
-        return self.get(db, username=self.username)
-        
+        return self.get(username=self.username)

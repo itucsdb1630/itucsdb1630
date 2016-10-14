@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import g
+from flask_login import LoginManager
+from flask_wtf.csrf import CsrfProtect
 from raven.contrib.flask import Sentry
 import psycopg2 as dbapi2
 import os
@@ -7,6 +9,7 @@ import json
 import re
 
 from lightmdb import views
+from lightmdb import forms
 from lightmdb import models
 
 # Get local settings
@@ -18,7 +21,7 @@ except ImportError as e:
     settings = None
 
 
-__all__ = ['create_app', 'get_db', 'init_db', ]
+__all__ = ['create_app', 'get_db', 'close_db', 'init_db', ]
 
 DEFAULT_APP_NAME = 'lightmdb'
 DEFAULT_APP_SECRET = 'Secret@LightMDB'
@@ -30,12 +33,14 @@ DEFAULT_BLUEPRINTS = (
 )
 
 
-def create_app(config=None):
+def create_app():
     """Create application and set settings."""
     app = Flask(DEFAULT_APP_NAME)
     # Session settings
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', DEFAULT_APP_SECRET)
     app.config['SESSION_COOKIE_NAME'] = 'Ssession'
+    # app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['PERMANENT_SESSION_LIFETIME'] = 2678400  # seconds
     app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['username', 'email']
     # Get environment variables
@@ -47,6 +52,11 @@ def create_app(config=None):
         _configure_test(app)
     else:
         _configure_local(app)
+    # Login Manager
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    # Protection
+    CsrfProtect(app)
     # Set sentry for debugging
     if os.getenv('SENTRY_DSN'):
         sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
@@ -72,6 +82,11 @@ def get_db(app):
     if not hasattr(g, 'database'):
         g.database = _connect_db(app)
     return g.database
+
+
+def close_db():
+    if hasattr(g, 'database'):
+        g.database.close()
 
 
 def _connect_db(app):
@@ -102,7 +117,7 @@ def _configure_test(app):
     app.config['dsn'] = "user='{}' password='{}' host='{}' port={} dbname='{}'".format(
         "postgres", "", "127.0.0.1", 5432, "lightmdb_test"
     )
-    
+
 
 def _configure_local(app):
     """Local Configurations."""
