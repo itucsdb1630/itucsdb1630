@@ -1,3 +1,3 @@
-from .user import UserForm
+from .user import UserForm, LoginForm
 
-__all__ = ['UserForm', ]
+__all__ = ['UserForm', 'LoginForm', ]

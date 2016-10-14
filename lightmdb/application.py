@@ -30,7 +30,13 @@ DEFAULT_DSN = "user='vagrant' password='vagrant' host='localhost' port=54321 dbn
 DEFAULT_BLUEPRINTS = (
     # Add blueprints here
     (views.frontend, ""),
+    (views.user, "/user")
 )
+
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+    return models.User.get(user_id)
 
 
 def create_app():
@@ -53,8 +59,8 @@ def create_app():
     else:
         _configure_local(app)
     # Login Manager
-    login_manager = LoginManager()
     login_manager.init_app(app)
+    login_manager.login_view = "login"
     # Protection
     CsrfProtect(app)
     # Set sentry for debugging

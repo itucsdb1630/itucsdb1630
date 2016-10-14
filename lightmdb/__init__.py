@@ -1,3 +1,3 @@
-from .application import create_app, get_db, close_db, init_db
+from .application import get_db, close_db, init_db, create_app
 
-__all__ = ['create_app', 'get_db', 'close_db', 'init_db', ]
+__all__ = ['get_db', 'close_db', 'init_db', 'create_app', ]

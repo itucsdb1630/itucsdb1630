@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import os
-from flask_script import Manager, Server, Shell, Command
+from flask_script import Manager, Server, Shell, Command, Option
 
 from lightmdb import create_app, get_db, close_db, init_db
+from lightmdb.models import User
 # Get local settings
 try:
     import local_settings as settings
@@ -40,12 +41,27 @@ class Migration(Command):
             init_db(app)
 
 
+class CreateUser(Command):
+    """Create new user."""
+    option_list = (
+        Option('--username', '-u', dest='username', required=True),
+        Option('--password', '-p', dest='password', required=True),
+        Option('--email', '-e', dest='email', required=True),
+        Option('--staff', '-s', dest='is_staff'),
+    )
+
+    def run(self, username, password, email, is_staff=False):
+        user = User(username=username, password=password, email=email, is_staff=is_staff)
+        user = user.save()
+        print("User %s created with id %d" % (user.username, user.pk))
+
 def _make_context():
     with app.app_context():
         return dict(app=app, db=get_db(app))
 
-manager.add_command("shell", Shell(make_context=_make_context, use_ipython=True))
-manager.add_command("migrate", Migration())
+manager.add_command('shell', Shell(make_context=_make_context, use_ipython=True))
+manager.add_command('migrate', Migration())
+manager.add_command('createuser', CreateUser())
 manager.add_command('runserver', Server(host=HOST, port=PORT, threaded=True))
 
 if __name__ == '__main__':

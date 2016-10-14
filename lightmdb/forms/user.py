@@ -18,3 +18,14 @@ class UserForm(Form):
     ])
     confirm = PasswordField('Repeat Password')
     name = StringField('FullName')
+
+
+class LoginForm(Form):
+    """Form to be used in login page."""
+    username = StringField('Username', [
+        validators.Length(min=4, max=49),
+        validators.DataRequired("Please, enter your username.")
+    ])
+    password = PasswordField('Password', [
+        validators.DataRequired("Please, enter your password")
+    ])
