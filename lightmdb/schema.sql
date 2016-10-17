@@ -4,5 +4,7 @@ CREATE TABLE users (
   username varchar(50) UNIQUE,
   password varchar(150) NOT NULL,
   email varchar(100) UNIQUE,
+  name varchar(200),
+  confirmed_at timestamp DEFAULT NULL,
   is_staff boolean DEFAULT true
 );
