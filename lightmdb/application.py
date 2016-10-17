@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import g
 from raven.contrib.flask import Sentry
+from raven import fetch_git_sha
 import psycopg2 as dbapi2
 import os
 import json
@@ -37,6 +38,7 @@ def create_app(config=None):
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', DEFAULT_APP_SECRET)
     app.config['SESSION_COOKIE_NAME'] = 'Ssession'
     app.config['PERMANENT_SESSION_LIFETIME'] = 2678400  # seconds
+    app.config['SENTRY_RELEASE'] = fetch_git_sha(os.path.dirname(__file__))
     # Get environment variables
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     # Set configuration
