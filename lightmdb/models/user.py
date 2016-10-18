@@ -11,20 +11,30 @@ def get_database():
 class User(UserMixin):
     """User Model."""
     def __init__(self, pk=None, username=None, password=None, email=None, name=None,
-                 confirmed_at=None, is_staff=False):
+                 confirmed_at=None, deleted=False, is_staff=False):
         self.pk = pk
         self.username = username
         self.password = password
         self.email = email
         self.name = name
         self.confirmed_at = confirmed_at
+        self.deleted = bool(deleted)
         self.is_staff = is_staff
         if not self.pk and self.password:
             # new user
             self.set_password()
 
     def __repr__(self):
+        if self.name:
+            return self.name
         return self.username
+
+    def __str__(self):
+        return self.__repr__()
+
+    @property
+    def is_active(self):
+        return self.deleted
 
     def get_id(self):
         return str(self.pk)
@@ -75,7 +85,7 @@ class User(UserMixin):
             raise ValueError("User is not saved yet.")
         db = get_database()
         cursor = db.cursor
-        query = "DELETE FROM users where id=%(id)s"
+        query = "UPDATE users SET deleted = TRUE WHERE id=%(id)s"
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
