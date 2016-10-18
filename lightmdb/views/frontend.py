@@ -58,3 +58,9 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('.index'))
+
+
+@frontend.route("/messaging/", methods=["GET"])
+@login_required
+def messaging():
+    return render_template('messaging/message.html')

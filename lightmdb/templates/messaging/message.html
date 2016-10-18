@@ -1,0 +1,155 @@
+{% from "helpers/_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}Registration{% endblock %}
+{% block content %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/messagepage.css') }}"/>
+    <div class="container border">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-user"></span> <b>People</b>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-info">Emin Mastizada</a>
+                        <a href="#" class="list-group-item">Memduh Gökırmak</a>
+                        <a href="#" class="list-group-item">Onur Can Çarkçı</a>
+                        <a href="#" class="list-group-item">Seda Bilgin</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-comment"></span> Chat with <b>Emin Mastizada</b>
+                    </div>
+                    <div class="panel-default">
+                        <div class="panel-body">
+                            <ul class="chat">
+                                <li class="left clearfix"><span class="chat-img pull-left">
+                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
+                                 width="50" height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Emin Mastizada</strong>
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>12 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
+                                 height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span
+                                                    class="glyphicon glyphicon-time"></span>13 mins ago
+                                            </small>
+                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="left clearfix"><span class="chat-img pull-left">
+                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
+                                 width="50" height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Emin Mastizada</strong>
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>14 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
+                                 height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span
+                                                    class="glyphicon glyphicon-time"></span>15 mins ago
+                                            </small>
+                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="left clearfix"><span class="chat-img pull-left">
+                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
+                                 width="50" height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Emin Mastizada</strong>
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>14 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
+                                 height="50">
+                        </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span
+                                                    class="glyphicon glyphicon-time"></span>15 mins ago
+                                            </small>
+                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Curabitur bibendum ornare
+                                            dolor, quis ullamcorper ligula sodales.
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                <input id="btn-input" type="text" class="form-control input-sm"
+                                       placeholder="Type your message here..."/>
+                                <span class="input-group-btn">
+                            <button class="btn btn-info btn-sm" id="btn-chat">
+                                Send</button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
