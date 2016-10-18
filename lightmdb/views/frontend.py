@@ -13,6 +13,10 @@ def index():
     now = datetime.now()
     return render_template('index.html', current_time=now.ctime())
 
+@frontend.route("/playlist")
+def playlist():
+    now = datetime.now()
+    return render_template('playlist.html', current_time=now.ctime())
 
 @frontend.route("/login/", methods=["GET", "POST"])
 def login():
