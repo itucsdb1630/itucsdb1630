@@ -10,7 +10,7 @@ messenger = Blueprint('messenger', __name__)
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('frontend.index'))
+    return redirect(url_for('frontend.logout'))
 
 
 @messenger.route("/")
