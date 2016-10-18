@@ -5,7 +5,6 @@ from lightmdb.models import User
 
 from datetime import datetime
 
-
 frontend = Blueprint('frontend', __name__)
 
 
@@ -63,4 +62,4 @@ def logout():
 @frontend.route("/messaging/", methods=["GET"])
 @login_required
 def messaging():
-    return render_template('messaging/message.html')
+    return render_template('messenger/messenger.html')
