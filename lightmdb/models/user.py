@@ -29,12 +29,9 @@ class User(UserMixin):
             return self.name
         return self.username
 
-    def __str__(self):
-        return self.__repr__()
-
     @property
     def is_active(self):
-        return self.deleted
+        return not self.deleted
 
     def get_id(self):
         return str(self.pk)
