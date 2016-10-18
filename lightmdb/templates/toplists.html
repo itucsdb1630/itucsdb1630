@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Toplists{% endblock %}
+{% block content %} 
+
+<div class="article">
+    <h1 class="header">LightMDb Top Rated Movies</h1>
+    <div class="byline">Top 5 as rated by LightMDb Users</div>
+    <hr />
+    <div class="lister">
+      <div>
+        <div class="nav">
+  <div class="controls float-right lister-activated">
+    Sort by:
+    <select name="sort" class="lister-sort-by">
+        <option value="rk:ascending"
+                selected="selected">
+          Ranking
+        </option>
+        <option value="ir:descending"
+                >
+          LightMDB Rating
+        </option>
+        <option value="us:descending"
+                >
+          Release Date
+        </option>
+        <option value="nv:descending"
+                >
+          Number of Ratings
+        </option>
+        <option value="ur:descending"
+                >
+          Your Rating
+        </option>
+    </select>
+    <span class="lister-sort-reverse descending"
+          data-sort="rk:desc">
+    </span>
+  </div>
+          
+        </div>
+      </div>
+      <br class="clear">
+      <table>
+        <colgroup>
+          <col class="chartTableColumnPoster"/>
+          <col class="chartTableColumnTitle"/>
+          <col class="chartTableColumnLightMDBRating"/>
+          <col class="chartTableColumnYourRating"/>
+        </colgroup>
+        <thead>
+        <tr>
+          <th>Poster</th>
+          <th>Rank & Title</th>
+          <th>LightMDB Rating</th>
+          <th>Your Rating</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody class="lister-list">
+
+  <tr>
+    <td class="posterColumn">
+
+   
+<a href="#" width="#" height="#"/>
+</a>    </td>
+    <td class="titleColumn">
+      1.
+      <a href="#" >MovieTitle</a>
+        <span class="secondaryInfo">(Year)</span>
+    </td>
+    <td class="ratingColumn LightMDb">
+            <strong>4,6</strong>
+    </td>
+    <td class="ratingColumn">
+    
+        <div class="boundary">
+            <div class="popover">
+<span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
+        </div>
+      
+    </div>
+  </tr>
+
+  <tr>
+    <td class="posterColumn">
+
+    
+<a href="#" width="#" height="#"/>
+</a>    </td>
+    <td class="titleColumn">
+      2.
+      <a href="#" >MovieTitle</a>
+        <span class="secondaryInfo">(Year)</span>
+    </td>
+    <td class="ratingColumn LightMDb">
+            <strong>4,6</strong>
+    </td>
+    <td class="ratingColumn">
+   
+        <div class="boundary">
+            <div class="popover">
+<span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>            </div>
+        </div>
+        
+    </div>
+  </tr>
+
+  <tr>
+    <td class="posterColumn">
+	<a href="#" width="#" height="#"/>
+	</a>   
+    </td>
+    <td class="titleColumn">
+      3.
+      <a href="#" >MovieTitle</a>
+        <span class="secondaryInfo">(Year)</span>
+    </td>
+    <td class="ratingColumn LightMDb">
+            <strong>4,5</strong>
+    </td>
+    <td class="ratingColumn">
+  
+        <div class="boundary">
+            <div class="popover">
+<span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>            </div>
+        </div>
+       
+    </div>
+  </tr>
+
+ <tr>
+    <td class="posterColumn">
+
+   
+<a href="#" width="#" height="#"/>
+</a>    </td>
+    <td class="titleColumn">
+      4.
+      <a href="#" >MovieTitle</a>
+        <span class="secondaryInfo">(Year)</span>
+    </td>
+    <td class="ratingColumn LightMDb">
+            <strong>4,4</strong>
+    </td>
+    <td class="ratingColumn">
+    
+        <div class="boundary">
+            <div class="popover">
+<span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
+        </div>
+      
+    </div>
+  </tr>
+
+ <tr>
+    <td class="posterColumn">
+
+	<a href="#" width="#" height="#"/></a>    
+   </td>
+    <td class="titleColumn">
+      5.
+      <a href="#" >MovieTitle</a>
+        <span class="secondaryInfo">(Year)</span>
+    </td>
+    <td class="ratingColumn LightMDb">
+            <strong>4,3</strong>
+    </td>
+    <td class="ratingColumn">
+            <div class="boundary">
+            <div class="popover">
+<span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
+        </div>  
+	   
+ 	</div>   
+     </tr>
+
+{% endblock %}
