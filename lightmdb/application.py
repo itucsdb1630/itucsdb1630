@@ -52,7 +52,7 @@ def create_app():
     # app.config['SESSION_COOKIE_SECURE'] = True
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['PERMANENT_SESSION_LIFETIME'] = 2678400  # seconds
-    app.config['SENTRY_RELEASE'] = fetch_git_sha(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    # app.config['SENTRY_RELEASE'] = fetch_git_sha(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
     app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['username', 'email']
     # Get environment variables
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
