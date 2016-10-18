@@ -60,3 +60,12 @@ def logout():
 
 
 
+
+@frontend.route("/privacypolicy/")
+def privacy():
+    return render_template('privacy.html')
+
+
+@frontend.route("/toplists/")
+def toplists():
+    return render_template('toplists.html')
