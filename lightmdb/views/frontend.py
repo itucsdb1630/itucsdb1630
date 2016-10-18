@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for
+from flask import Blueprint, render_template, current_app, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from lightmdb.forms import LoginForm, UserForm
 from lightmdb.models import User
@@ -13,10 +13,6 @@ def index():
     now = datetime.now()
     return render_template('index.html', current_time=now.ctime())
 
-@frontend.route("/playlist")
-def playlist():
-    now = datetime.now()
-    return render_template('playlist.html', current_time=now.ctime())
 
 @frontend.route("/login/", methods=["GET", "POST"])
 def login():
@@ -63,6 +59,28 @@ def logout():
     return redirect(url_for('.index'))
 
 
+@frontend.route("/initdb/", methods=["GET"])
+def initdb():
+    """Temporary method to flush database."""
+    from lightmdb import init_db
+    if current_user.is_authenticated:
+        logout_user()
+    init_db(current_app)
+    user = User(
+        username='admin',
+        password='admin',
+        email='admin@lightmdb.org',
+        name='Website Admin',
+        is_staff=True
+    )
+    user = user.save()
+    return redirect(url_for('.index'))
+
+
+@frontend.route("/playlist")
+def playlist():
+    now = datetime.now()
+    return render_template('playlist.html', current_time=now.ctime())
 
 
 @frontend.route("/privacypolicy/")
