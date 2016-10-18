@@ -5,7 +5,6 @@ from lightmdb.models import User
 
 from datetime import datetime
 
-
 frontend = Blueprint('frontend', __name__)
 
 
@@ -58,3 +57,6 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('.index'))
+
+
+

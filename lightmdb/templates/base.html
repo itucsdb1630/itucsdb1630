@@ -27,6 +27,9 @@
                 <li><a href="#">Categories</a></li>
                 <li><a href="#">Toplists</a></li>
                 <li><a href="#">Contact</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="/messenger">Messenger</a></li>
+                {% endif %}
             </ul>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
@@ -43,9 +46,7 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="{{ current_user.email | gravatar }}" class="img-circle"
-                                     alt="username">
-
+                                <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username">
                                 <p>
                                     {{ current_user }}
                                 </p>
@@ -92,5 +93,6 @@
 <!-- Le Scripts -->
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% block extra_css %}{% endblock %}
 </body>
 </html>
