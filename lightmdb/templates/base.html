@@ -28,7 +28,7 @@
                 <li><a href="#">Toplists</a></li>
                 <li><a href="#">Contact</a></li>
                 {% if current_user.is_authenticated %}
-                    <li><a href="/messaging/">Messages</a></li>
+                    <li><a href="/messenger">Messenger</a></li>
                 {% endif %}
             </ul>
             <form class="navbar-form navbar-left" role="search">
@@ -93,5 +93,6 @@
 <!-- Le Scripts -->
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% block extra_css %}{% endblock %}
 </body>
 </html>

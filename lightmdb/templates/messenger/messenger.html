@@ -1,14 +1,13 @@
 {% from "helpers/_formhelpers.html" import render_field %}
 {% extends "base.html" %}
-{% block title %}Registration{% endblock %}
+{% block title %}Messenger{% endblock %}
 {% block content %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/messenger.css') }}"/>
     <div class="container border">
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-primary">
-                    <div class="pan el-heading">
+                    <div class="panel-heading">
                         <span class="glyphicon glyphicon-user"></span> <b>People</b>
                     </div>
                     <div class="list-group">
@@ -54,7 +53,7 @@
                                             <small class=" text-muted"><span
                                                     class="glyphicon glyphicon-time"></span>13 mins ago
                                             </small>
-                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
                                         </div>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -90,7 +89,7 @@
                                             <small class=" text-muted"><span
                                                     class="glyphicon glyphicon-time"></span>15 mins ago
                                             </small>
-                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
                                         </div>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -126,7 +125,7 @@
                                             <small class=" text-muted"><span
                                                     class="glyphicon glyphicon-time"></span>15 mins ago
                                             </small>
-                                            <strong class="pull-right primary-font">{{ current_user }}</strong>
+                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
                                         </div>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -152,4 +151,10 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_css %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/messenger.css') }}"/>
+
 {% endblock %}

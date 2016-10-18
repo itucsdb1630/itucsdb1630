@@ -59,7 +59,4 @@ def logout():
     return redirect(url_for('.index'))
 
 
-@frontend.route("/messaging/", methods=["GET"])
-@login_required
-def messaging():
-    return render_template('messenger/messenger.html')
+
