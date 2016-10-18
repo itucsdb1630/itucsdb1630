@@ -6,5 +6,6 @@ CREATE TABLE users (
   email varchar(100) UNIQUE,
   name varchar(200),
   confirmed_at timestamp DEFAULT NULL,
+  deleted boolean DEFAULT false,
   is_staff boolean DEFAULT true
 );

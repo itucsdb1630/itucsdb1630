@@ -1,7 +1,7 @@
-import os
 from lightmdb import create_app, get_db, init_db
 from lightmdb.models import User
 import unittest
+
 
 class LightmdbTestCase(unittest.TestCase):
     def setUp(self):

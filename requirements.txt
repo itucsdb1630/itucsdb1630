@@ -4,4 +4,5 @@ psycopg2
 Flask-WTF
 flask-login
 blinker
+Flask-Gravatar
 raven

@@ -1,8 +1,9 @@
-from flask import Flask
-from flask import g
+from flask import Flask, g
 from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
 from raven.contrib.flask import Sentry
+from flask_gravatar import Gravatar
+from raven import fetch_git_sha
 import psycopg2 as dbapi2
 import os
 import json
@@ -34,6 +35,8 @@ DEFAULT_BLUEPRINTS = (
 )
 
 login_manager = LoginManager()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return models.User.get(user_id)
@@ -48,6 +51,7 @@ def create_app():
     # app.config['SESSION_COOKIE_SECURE'] = True
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['PERMANENT_SESSION_LIFETIME'] = 2678400  # seconds
+    app.config['SENTRY_RELEASE'] = fetch_git_sha(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
     app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['username', 'email']
     # Get environment variables
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
@@ -60,9 +64,15 @@ def create_app():
         _configure_local(app)
     # Login Manager
     login_manager.init_app(app)
-    login_manager.login_view = "login"
+    login_manager.login_view = "frontend.login"
     # Protection
     CsrfProtect(app)
+    # Gravatar
+    app.config['gravatar'] = Gravatar(
+        app, size=160, rating='g', default='retro',
+        force_default=False, force_lower=False, use_ssl=True, base_url=None
+    )
+
     # Set sentry for debugging
     if os.getenv('SENTRY_DSN'):
         sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
