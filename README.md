@@ -5,7 +5,7 @@ LightMDB
 
 # Movie Discussion Network
 
-Website Alias:
+Website Alias
 -------------
 [itucsdb1630.mybluemix.net](https://itucsdb1630.mybluemix.net/)
 
@@ -15,6 +15,9 @@ Use Sphinx documents under the `docs` folder.
 
 It is also available on [itucsdb1630.readthedocs.io](https://itucsdb1630.readthedocs.io/)
 
+Database Schema
+---------------
+`lightmdb/schema.sql` file contains database schema
 
 License
 -------

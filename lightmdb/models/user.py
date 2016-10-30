@@ -1,5 +1,6 @@
 from flask import current_app
 from flask_login import UserMixin
+from collections import OrderedDict
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -10,6 +11,7 @@ def get_database():
 
 class User(UserMixin):
     """User Model."""
+    TABLE_NAME = 'users'
     def __init__(self, pk=None, username=None, password=None, email=None, name=None,
                  confirmed_at=None, deleted=False, is_staff=False):
         self.pk = pk
@@ -46,8 +48,21 @@ class User(UserMixin):
         """Check password match with hash."""
         return check_password_hash(self.password, password)
 
-    @staticmethod
-    def get(pk=None, username=None, email=None):
+    def values(self):
+        data = OrderedDict([
+            ('pk', self.pk),
+            ('username', self.username),
+            ('password', self.password),
+            ('email', self.email),
+            ('name', self.name),
+            ('confirmed_at', self.confirmed_at),
+            ('deleted', self.deleted),
+            ('is_staff', self.is_staff)
+        ])
+        return data
+
+    @classmethod
+    def get(cls, pk=None, username=None, email=None):
         """Get user by identifier.
 
         Usage: User.get(user_id)
@@ -56,11 +71,20 @@ class User(UserMixin):
         db = get_database()
         cursor = db.cursor
         if pk:
-            cursor.execute("SELECT * FROM users WHERE id=%(id)s", {'id': pk})
+            cursor.execute(
+                "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME),
+                {'id': pk}
+            )
         elif username:
-            cursor.execute("SELECT * FROM users WHERE username=%(username)s", {'username': username})
+            cursor.execute(
+                "SELECT * FROM {table} WHERE username=%(username)s".format(table=cls.TABLE_NAME),
+                {'username': username}
+            )
         elif email:
-            cursor.execute("SELECT * FROM users WHERE email=%(email)s", {'email': email})
+            cursor.execute(
+                "SELECT * FROM {table} WHERE email=%(email)s".format(table=cls.TABLE_NAME),
+                {'email': email}
+            )
         else:
             return None
         user = db.fetch_execution(cursor)
@@ -68,47 +92,64 @@ class User(UserMixin):
             return User(**user[0])
         return None
 
-    @staticmethod
-    def filter(**kwargs):
+    @classmethod
+    def filter(cls, **kwargs):
         db = get_database()
         cursor = db.cursor
-        query = "SELECT * FROM users"
+        query = "SELECT * FROM " + cls.TABLE_NAME
         if kwargs:
-            pass
-        return []
+            filter_query, filter_data = db.where_builder(kwargs)
+            query += " WHERE " + filter_query
+        cursor = db.cursor
+        cursor.execute(query, filter_data)
+        users = db.fetch_execution(cursor)
+        result = []
+        for user in users:
+            result.append(User(**user))
+        return result
 
     def delete(self):
         if not self.pk:
             raise ValueError("User is not saved yet.")
         db = get_database()
         cursor = db.cursor
-        query = "UPDATE users SET deleted = TRUE WHERE id=%(id)s"
+        query = "UPDATE {table} SET deleted = TRUE WHERE id=%(id)s".format(table=self.TABLE_NAME)
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
     def save(self):
         db = get_database()
-        user = self.filter(username=self.username)
+        data = self.values()
+        # use filter for django as it raises exception instead of None return
+        user = self.get(username=self.username)
         if user:
-            # update
-            # @TODO
-            raise NotImplemented
-            return self.get(username=self.username)
-            # new
-        data = {
-            'username': self.username,
-            'email': self.email,
-            'name': self.name,
-            'confirmed_at': self.confirmed_at,
-            'is_staff': self.is_staff,
-            'password': self.password
-        }
-        query = "INSERT INTO users " \
+            # update old user
+            old_data = user.values()
+            diffkeys = [key for key in data if data[key] != old_data[key]]
+            if not diffkeys:
+                # Nothing changed
+                return user
+            filters = {}
+            for key in diffkeys:
+                filters[key] = self.values()[key]
+            query = "UPDATE {table} SET ".format(table=self.TABLE_NAME)
+            for key in filters:
+                query += key + ' = %(' + key + ')s, '
+            # Remove last comma
+            query = query.rstrip(', ') + ' '
+            # Add filter
+            query += "WHERE id={pk}".format(pk=user.pk)
+            db.cursor.execute(query, filters)
+            db.commit()
+            # Return saved user
+            return self.get(pk=user.pk)
+        # new user
+        del data['pk']
+        query = "INSERT INTO {table} " \
                 "(username, email, name, confirmed_at, is_staff, password) " \
                 "VALUES" \
                 "(%(username)s, %(email)s, %(name)s, %(confirmed_at)s, " \
-                "%(is_staff)s, %(password)s)"
-
-        db.cursor.execute(query, data)
+                "%(is_staff)s, %(password)s)".format(table=self.TABLE_NAME)
+        db.cursor.execute(query, dict(data))
         db.commit()
         return self.get(username=self.username)
