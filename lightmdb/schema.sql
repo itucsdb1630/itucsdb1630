@@ -16,10 +16,9 @@ INSERT INTO users (
 );
 
 
+DROP TABLE IF EXISTS contactUs;
 DROP TYPE IF EXISTS contactStatus;
 CREATE TYPE contactStatus AS ENUM ('new','replied','waiting','spam','closed');
-
-DROP TABLE IF EXISTS contactUs;
 CREATE TABLE contactUs(
   id SERIAL PRIMARY KEY,
   title varchar(100) NOT NULL,
