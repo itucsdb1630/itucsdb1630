@@ -66,6 +66,9 @@ def initdb():
     if current_user.is_authenticated:
         logout_user()
     init_db(current_app)
+    user = User.get(username='admin')
+    user.set_password('admin')
+    user = user.save()
     return redirect(url_for('.index'))
 
 
