@@ -16,7 +16,7 @@ INSERT INTO users (
 );
 
 
-DROP TYPE IF EXIST contactStatus;
+DROP TYPE IF EXISTS contactStatus;
 CREATE TYPE contactStatus AS ENUM ('new','replied','waiting','spam','closed');
 
 DROP TABLE IF EXISTS contactUs;
