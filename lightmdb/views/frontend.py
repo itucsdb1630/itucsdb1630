@@ -66,14 +66,6 @@ def initdb():
     if current_user.is_authenticated:
         logout_user()
     init_db(current_app)
-    user = User(
-        username='admin',
-        password='admin',
-        email='admin@lightmdb.org',
-        name='Website Admin',
-        is_staff=True
-    )
-    user = user.save()
     return redirect(url_for('.index'))
 
 
