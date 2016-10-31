@@ -1,18 +1,32 @@
-DROP TABLE if exists users;
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username varchar(50) UNIQUE,
-  password varchar(150),
-  email varchar(100) UNIQUE,
-  name varchar(200),
+  id           SERIAL PRIMARY KEY,
+  username     VARCHAR(50) UNIQUE,
+  password     VARCHAR(150),
+  email        VARCHAR(100) UNIQUE,
+  name         VARCHAR(200),
   confirmed_at timestamp DEFAULT NULL,
-  deleted boolean DEFAULT false,
-  is_staff boolean DEFAULT false
+  deleted      BOOLEAN   DEFAULT FALSE,
+  is_staff     BOOLEAN   DEFAULT FALSE
 );
 INSERT INTO users (
   username, email, name, is_staff
 ) VALUES (
-  'admin', 'info@lightmdb.org', 'LightMdb Admin', true
+  'admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE
+);
+
+DROP TABLE IF EXISTS user_messages;
+CREATE TABLE user_messages (
+  id          SERIAL PRIMARY KEY,
+  pk_sender   INT,
+  pk_receiver INT,
+  time_stamp  timestamp DEFAULT CURRENT_TIMESTAMP,
+  message     VARCHAR(200)
+);
+INSERT INTO user_messages (
+  pk_sender, pk_receiver, message
+) VALUES (
+  1, 2, 'Are you even exist ? Please do not tell anybody but I believe I am not.'
 );
 
 
