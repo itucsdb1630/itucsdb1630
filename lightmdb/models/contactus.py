@@ -58,9 +58,7 @@ class ContactMessage(object):
                 db = get_database()
                 cursor = db.cursor
                 cursor.execute("UPDATE {table} SET status=%s WHERE id=%s".format(table=self.TABLE_NAME), [new_status,self.cid])
-                cursor.close()
                 db.commit()
-                db.close()
                 return True
             except:
                 return False
@@ -68,27 +66,23 @@ class ContactMessage(object):
 
     def delete_message(self):
         db = get_database()
-        cursor = db.cursor
         ##cursor.execute("UPDATE {table} SET deleted=1 WHERE id=%".format(table=self.TABLE_NAME), [self.cid])
-        cursor.execute("DELETE FROM {table} WHERE id=%s".format(table=self.TABLE_NAME), [self.cid])
-        cursor.close()
+        db.cursor.execute("DELETE FROM {table} WHERE id=%s".format(table=self.TABLE_NAME), [self.cid])
         db.commit()
-        db.close()
 
     def save(self):
         try:
             db = get_database()
-            cursor = db.cursor
-            cursor.execute("INSERT INTO {table} (title,content,email,phone) VALUES (%s,%s,%s,%s)".format(table=self.TABLE_NAME),[self.title,self.content,self.email,self.phone])
-            cursor.close()
+            db.cursor.execute("INSERT INTO {table} (title,content,email,phone) VALUES (%s,%s,%s,%s)".format(table=self.TABLE_NAME),[self.title,self.content,self.email,self.phone])
             db.commit()
-            db.close()
             return True
         except:
             return False
 
     @staticmethod
     def get_messages(desired_status=None,get_deleted=False):
+        db = get_database()
+        cursor = db.cursor
         accepted_status=[]
         all_status = ['new', 'replied', 'waiting', 'spam', 'closed']
         if not desired_status:
@@ -102,11 +96,9 @@ class ContactMessage(object):
         if len(accepted_status) > 0:
             where += '\' or status =  \''.join(accepted_status)
             where += '\')'
-            try:
-                db = get_database()
-                cursor = db.cursor
-                cursor.execute("SELECT id,title,content,email,phone,status,sendtime from contactUs where  "+where)
-                return cursor.fetchall()
-            except:
-                return []
+            cursor.execute("SELECT id,title,content,email,phone,status,sendtime from contactUs where  "+where)
+            result = cursor.fetchall()
+            if result:
+                return result
+            return []
         return []

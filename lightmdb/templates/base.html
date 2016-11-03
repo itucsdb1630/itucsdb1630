@@ -26,13 +26,13 @@
            <ul class="nav navbar-nav">
                 <!-- <li class="active"><a href="#">Current Link <span class="sr-only">(current)</span></a></li> -->
                 <li><a href="#">Categories</a></li>
-                <li><a href="/toplists">Toplists</a></li>
-                <li><a href="/contact/">Contact</a></li>
                 <li><a href="/addmovie/">Add a Movie</a></li>
-                <li><a href="/privacypolicy">Privacy Policy</a></li>
+                <li><a href="{{ url_for('toplist.toplists') }}">Toplists</a></li>
+                <li><a href="{{ url_for('contactus.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>
                 {% if current_user.is_authenticated %}
-                    <li><a href="/admin/contact/">Contact Admin</a></li>
-                    <li><a href="/messenger">Messenger</a></li>
+                  <li><a href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>
+                  <li><a href="/messenger">Messenger</a></li>
                 {% endif %}
             </ul>
             <form class="navbar-form navbar-left" role="search">
@@ -52,7 +52,9 @@
                             <li class="user-header">
                                 <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username">
                                 <p>
-                                    {{ current_user }}
+                                    <a href="{{ url_for('user.me') }}">
+                                      {{ current_user }}
+                                    </a>
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -73,25 +75,25 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-info btn-flat">Profile</a>
+                                    <a href="{{ url_for('user.me') }}" class="btn btn-info btn-flat profile-button">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{ url_for('.logout') }}" class="btn btn-danger btn-flat">Sign out</a>
+                                    <a href="{{ url_for('frontend.logout') }}" class="btn btn-danger btn-flat logout-button">Sign out</a>
                                 </div>
                             </li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="user usermenu">
-                        <a href="{{ url_for('.login') }}?next={{ request.path }}">Sign In</a>
+                        <a href="{{ url_for('frontend.login') }}?next={{ request.path }}">Sign In</a>
                     </li>
-                    <li><a href="{{ url_for('.register') }}">Register</a></li>
+                    <li><a href="{{ url_for('frontend.register') }}">Register</a></li>
                 {% endif %}
             </ul>
         </div>
     </div>
 </nav>
-<div class="container">
+<div class="{% block containerclass %}container{% endblock %}">
     {% block content %}{% endblock %}
 </div>
 <!-- Le Scripts -->

@@ -1,0 +1,32 @@
+{% from "helpers/_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+    <div class ='row' >
+    <div class = 'col-lg-4'></div>
+    <div class = 'col-lg-4'><h2 class="center-block text-center"><i class = 'fa fa-question-circle'></i> Please Ask <i class = 'fa fa-question-circle'></i></h2> </div>
+    <div class = 'col-lg-4'></div>
+  <div class="row extra-pt5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+      <form method=post action="{{ url_for('contactus.contact') }}">
+        <fieldset>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          {% if errors %}
+            <div class="alert alert-dismissible alert-danger">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <strong>Error!</strong> {{ errors }}
+            </div>
+          {% endif %}
+          {% for field in form %}
+            {{ render_field(field) }}
+          {% endfor %}
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+{% endblock %}

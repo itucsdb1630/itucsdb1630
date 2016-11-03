@@ -31,8 +31,11 @@ DEFAULT_DSN = "user='vagrant' password='vagrant' host='localhost' port=54321 dbn
 DEFAULT_BLUEPRINTS = (
     # Add blueprints here
     (views.frontend, ""),
-    (views.user, "/user"),
-    (views.messenger, "/messenger")
+    (views.user, "/profile"),
+    (views.messenger, "/messenger"),
+    (views.contactus, "/contact"),
+    (views.playlist, "/playlists"),
+    (views.toplist, "/toplists"),
 )
 
 login_manager = LoginManager()

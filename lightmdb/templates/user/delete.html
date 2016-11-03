@@ -1,15 +1,12 @@
-{% from "helpers/_formhelpers.html" import render_field %}
 {% extends "base.html" %}
-{% block title %}Contact Us{% endblock %}
+{% block title %}{{ current_user }} - Delete{% endblock %}
 {% block content %}
-    <div class ='row' >
-    <div class = 'col-lg-4'></div>
-    <div class = 'col-lg-4'><h2 class="center-block text-center"><i class = 'fa fa-question-circle'></i> Please Ask <i class = 'fa fa-question-circle'></i></h2> </div>
-    <div class = 'col-lg-4'></div>
   <div class="row extra-pt5">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-center">
-      <form method=post action="/contactus/">
+      <h1>This action cannot be reverted</h1>
+      <h2>Are you sure?</h2>
+      <form method=post action="{{ url_for('user.delete') }}">
         <fieldset>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           {% if errors %}
@@ -18,11 +15,8 @@
               <strong>Error!</strong> {{ errors }}
             </div>
           {% endif %}
-          {% for field in form %}
-            {{ render_field(field) }}
-          {% endfor %}
           <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-danger">DELETE</button>
           </div>
         </fieldset>
       </form>
