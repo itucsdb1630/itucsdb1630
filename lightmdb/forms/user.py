@@ -45,6 +45,25 @@ class UserForm(Form):
     )
 
 
+class ProfileForm(Form):
+    """Edit Profile Form."""
+    email = EmailField('Email', [
+            validators.Email("Please, enter correct email address."),
+            validators.DataRequired("Please, enter your email address.")
+        ],
+        render_kw={
+            "placeholder": "E-mail",
+            "class": "form-control"
+        }
+    )
+    name = StringField('FullName',
+        render_kw={
+            "placeholder": "FullName",
+            "class": "form-control"
+        }
+    )
+
+
 class LoginForm(Form):
     """Form to be used in login page."""
     username = StringField('Username', [

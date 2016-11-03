@@ -68,6 +68,9 @@ li.user-header {
 .extra-pt5 {
   padding-top: 10em;
 }
+.pb-1 {
+  padding-bottom: 1em;
+}
 .error-text {
   color: #ff0000;
 }

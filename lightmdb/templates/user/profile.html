@@ -24,7 +24,10 @@
     </div>
   </div>
   {% if current_user.pk == user.pk %}
-    <button class="btn btn-primary">Edit Profile</button>
+    <div class="pb-1">
+      <a href="{{ url_for('user.edit') }}" class="btn btn-primary">Edit Profile</a>
+      <a href="{{ url_for('user.delete') }}" class="btn btn-danger">Delete Profile</a>
+    </div>
   {% endif %}
 </div>
 <div class="container profile-container">

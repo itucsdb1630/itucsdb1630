@@ -1,12 +1,11 @@
+{% from "helpers/_formhelpers.html" import render_field %}
 {% extends "base.html" %}
-{% block title %}{{ current_user }} - Delete{% endblock %}
+{% block title %}{{ current_user }}{% endblock %}
 {% block content %}
   <div class="row extra-pt5">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-center">
-      <h1>This action cannot be reverted</h1>
-      <h2>Are you sure?</h2>
-      <form method=post action="{{ url_for('user.delete') }}">
+      <form method=post action="{{ url_for('user.edit') }}">
         <fieldset>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           {% if errors %}
@@ -15,8 +14,10 @@
               <strong>Error!</strong> {{ errors }}
             </div>
           {% endif %}
+          {{ render_field(form.name) }}
+          {{ render_field(form.email) }}
           <div class="form-group">
-            <button type="submit" class="btn btn-danger">DELETE</button>
+            <button type="submit" class="btn btn-primary">Update</button>
           </div>
         </fieldset>
       </form>
