@@ -52,41 +52,6 @@ def register():
     return render_template('user/register.html', form=form)
 
 
-@frontend.route("/contactus/", methods=["GET", "POST"])
-def contact_us():
-    form = ContactForm(request.form)
-    if request.method == 'POST' and form.validate():
-        message = ContactMessage(
-            title=form.title.data,
-            content=form.content.data,
-            email=form.email.data,
-            phone=form.phone.data
-        )
-        message.save()
-        return redirect(url_for('.contact_us'))
-    return render_template('contactus.html', form=form)
-
-@frontend.route("/admin/contactus/", methods=["GET", "POST"])
-def contact_us_admin():
-    desired_types = ['new']
-    if request.method == 'POST':
-        flash(request.form)
-        if 'update' in request.form and 'status' in request.form:
-            message=ContactMessage(request.form['update'])
-            message.change_status(request.form['status'])
-        elif 'delete' in request.form:
-            message = ContactMessage(request.form['delete'])
-            message.delete_message()
-        elif 'show' in request.form:
-            desired_types=[]
-            all_types=['new','replied','waiting','spam','closed']
-            for one_type in all_types:
-                if one_type in request.form:
-                    desired_types.append(one_type)
-    messages=ContactMessage.get_messages(desired_types)
-    return render_template('contactusadmin.html', table=messages,thead=['Update Status','Title','Content','Email','Phone','Status','Sent Time','Delete'])
-
-
 @frontend.route("/logout/", methods=["GET"])
 @login_required
 def logout():
@@ -107,17 +72,6 @@ def initdb():
     return redirect(url_for('.index'))
 
 
-@frontend.route("/playlist")
-def playlist():
-    now = datetime.now()
-    return render_template('playlist.html', current_time=now.ctime())
-
-
-@frontend.route("/privacypolicy/")
+@frontend.route("/legal/")
 def privacy():
     return render_template('privacy.html')
-
-
-@frontend.route("/toplists/")
-def toplists():
-    return render_template('toplists.html')

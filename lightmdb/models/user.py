@@ -100,7 +100,6 @@ class User(UserMixin):
         if kwargs:
             filter_query, filter_data = db.where_builder(kwargs)
             query += " WHERE " + filter_query
-        cursor = db.cursor
         cursor.execute(query, filter_data)
         users = db.fetch_execution(cursor)
         result = []
@@ -119,6 +118,7 @@ class User(UserMixin):
 
     def save(self):
         db = get_database()
+        cursor = db.cursor
         data = self.values()
         # use filter for django as it raises exception instead of None return
         user = self.get(username=self.username)
@@ -139,7 +139,7 @@ class User(UserMixin):
             query = query.rstrip(', ') + ' '
             # Add filter
             query += "WHERE id={pk}".format(pk=user.pk)
-            db.cursor.execute(query, filters)
+            cursor.execute(query, filters)
             db.commit()
             # Return saved user
             return self.get(pk=user.pk)
@@ -150,6 +150,6 @@ class User(UserMixin):
                 "VALUES" \
                 "(%(username)s, %(email)s, %(name)s, %(confirmed_at)s, " \
                 "%(is_staff)s, %(password)s)".format(table=self.TABLE_NAME)
-        db.cursor.execute(query, dict(data))
+        cursor.execute(query, dict(data))
         db.commit()
         return self.get(username=self.username)

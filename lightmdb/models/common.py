@@ -4,6 +4,7 @@
 class Database(object):
     def __init__(self, connection=None):
         self.connection = connection
+        self.connection.set_session(autocommit=True)
 
     @property
     def cursor(self):

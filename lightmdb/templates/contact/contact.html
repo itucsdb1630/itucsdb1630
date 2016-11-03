@@ -9,7 +9,7 @@
   <div class="row extra-pt5">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-center">
-      <form method=post action="/contactus/">
+      <form method=post action="{{ url_for('contactus.contact') }}">
         <fieldset>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           {% if errors %}
