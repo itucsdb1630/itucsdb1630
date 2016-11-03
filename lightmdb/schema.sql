@@ -29,6 +29,16 @@ INSERT INTO user_messages (
   1, 2, 'Are you even exist ? Please do not tell anybody but I believe I am not.'
 );
 
+DROP TABLE IF EXISTS movies;
+CREATE TABLE movies(
+ id SERIAL PRIMARY KEY,
+ title varchar(200) NOT NULL,
+ synopsis varchar(254) NOT NULL,
+ score FLOAT,
+ rewatchability FLOAT
+);
+
+
 
 DROP TABLE IF EXISTS contactUs;
 DROP TYPE IF EXISTS contactStatus;
@@ -46,3 +56,4 @@ CREATE TABLE contactUs(
 
 INSERT INTO contactUs (title,content,email,phone) 
     VALUES ('Want to ask','How can I change my password','user@example.com','555111222333');
+
