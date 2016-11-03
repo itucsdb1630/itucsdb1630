@@ -1,0 +1,34 @@
+{% from "helpers/_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}{{ current_user }}{% endblock %}
+{% block content %}
+{% block containerclass %}{% endblock %}
+<div class="cover">
+  <img class="cover-image" src="{{ url_for('static', filename='images/cover1.jpg') }}" />
+</div>
+<div class="profile-header">
+  <div class="profile-photo">
+    <img class="profile-image" src="{{ user.email | gravatar }}"/>
+  </div>
+  <h1>{{ user }}</h1>
+  <h2>No badges yet</h2>
+  <div class="row text-center profile-stats">
+    <div class="col-md-4">
+      <i class="fa fa-users"></i> 0
+    </div>
+    <div class="col-md-4">
+      <i class="fa fa-comments"></i> 0
+    </div>
+    <div class="col-md-4">
+      <i class="fa fa-share-alt"></i> 0
+    </div>
+  </div>
+  {% if current_user.pk == user.pk %}
+    <button class="btn btn-primary">Edit Profile</button>
+  {% endif %}
+</div>
+<div class="container profile-container">
+  <hr/>
+  Status Messages
+</div>
+{% endblock %}
