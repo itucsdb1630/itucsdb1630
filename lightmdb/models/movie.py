@@ -5,7 +5,7 @@ def get_database():
     from lightmdb import get_db
     return get_db(current_app)
 
-class Movie():
+class Movie(object):
     """Movie Model."""
     TABLE_NAME = 'movies'
     def __init__(self, pk=None, title=None, year=None, votes=None, rating=None,
