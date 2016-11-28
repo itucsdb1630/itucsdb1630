@@ -16,7 +16,10 @@ class MovieForm(Form):
             validators.DataRequired("Please, Enter movie release year.")
         ],
         render_kw={
-           "placeholder": "Release Year",
-           "class": "form-control"
+            "placeholder": "Release Year",
+            "class": "form-control",
+            "type": "number",
+            "min": 1600,
+            "max": 2200
         }
     )
