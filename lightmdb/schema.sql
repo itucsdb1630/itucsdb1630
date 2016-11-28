@@ -31,11 +31,14 @@ INSERT INTO user_messages (
 
 DROP TABLE IF EXISTS movies;
 CREATE TABLE movies(
- id SERIAL PRIMARY KEY,
- title varchar(200) NOT NULL,
- synopsis varchar(254) NOT NULL,
- score FLOAT,
- rewatchability FLOAT
+  id SERIAL PRIMARY KEY,
+  title varchar(200) UNIQUE NOT NULL,
+  synopsis varchar(254) NOT NULL,
+  year INT,
+  votes INT,
+  score FLOAT,
+  rewatchability_count INT,
+  rewatchability FLOAT
 );
 
 

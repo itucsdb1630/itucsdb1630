@@ -1,26 +1,26 @@
 from flask import current_app
 from collections import OrderedDict
 
+
 def get_database():
     from lightmdb import get_db
     return get_db(current_app)
 
+
 class Movie(object):
     """Movie Model."""
     TABLE_NAME = 'movies'
-    def __init__(self, pk=None, title=None, year=None, votes=None, rating=None,
-                 rewatch=None,deleted=False):
+
+    def __init__(self, pk=None, title=None, synopsis=None, year=None, votes=0, score=0,
+                 rewatchability_count=0, rewatchability=0):
         self.pk = pk
         self.title = title
+        self.synopsis = synopsis
         self.year = year
         self.votes = votes
-        self.rating = rating
-        self.rewatch = rewatch
-        self.deleted = bool(deleted)
-
-    @property
-    def is_active(self):
-        return not self.deleted
+        self.score = score
+        self.rewatchability_count = rewatchability_count
+        self.rewatchability = rewatchability
 
     def get_id(self):
         return str(self.pk)
@@ -29,16 +29,17 @@ class Movie(object):
         data = OrderedDict([
             ('pk', self.pk),
             ('title', self.title),
+            ('synopsis', self.synopsis),
             ('year', self.year),
             ('votes', self.votes),
-            ('rating', self.rating),
-            ('rewatch', self.rewatch),
-            ('deleted', self.deleted),
+            ('score', self.score),
+            ('rewatchability_count', self.rewatchability_count),
+            ('rewatchability', self.rewatchability),
         ])
         return data
 
     @classmethod
-    def get(cls, pk=None, title=None, year=None):
+    def get(cls, pk=None, title=None):
         """Get movie by identifier.
 
         Usage: Movie.get(title)
@@ -56,11 +57,6 @@ class Movie(object):
                 "SELECT * FROM {table} WHERE title=%(title)s".format(table=cls.TABLE_NAME),
                 {'title': title}
             )
-        elif year:
-            cursor.execute(
-                "SELECT * FROM {table} WHERE year=%(year)s".format(table=cls.TABLE_NAME),
-                {'year': year}
-            )
         else:
             return None
         movie = db.fetch_execution(cursor)
@@ -72,11 +68,11 @@ class Movie(object):
     def filter(cls, **kwargs):
         db = get_database()
         cursor = db.cursor
+        filter_data = {}
         query = "SELECT * FROM " + cls.TABLE_NAME
         if kwargs:
             filter_query, filter_data = db.where_builder(kwargs)
             query += " WHERE " + filter_query
-        cursor = db.cursor
         cursor.execute(query, filter_data)
         movies = db.fetch_execution(cursor)
         result = []
@@ -89,7 +85,7 @@ class Movie(object):
             raise ValueError("Movie is not saved yet.")
         db = get_database()
         cursor = db.cursor
-        query = "UPDATE {table} SET deleted = TRUE WHERE id=%(id)s".format(table=self.TABLE_NAME)
+        query = "DELETE FROM {table} WHERE id=%(id)s".format(table=self.TABLE_NAME)
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
@@ -121,10 +117,10 @@ class Movie(object):
         # new movie
         del data['pk']
         query = "INSERT INTO {table} " \
-                "(title, year, votes, rating, rewatch) " \
+                "(title, synopsis, year, votes, score, rewatchability_count, rewatchability) " \
                 "VALUES" \
-                "(%(title)s, %(year)s, %(votes)s, %(rating)s, " \
-                "%(rewatch)s)".format(table=self.TABLE_NAME)
+                "(%(title)s, %(synopsis)s, %(year)s, %(votes)s, %(score)s, " \
+                "%(rewatchability_count)s, %(rewatchability)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
         db.commit()
         return self.get(title=self.title)

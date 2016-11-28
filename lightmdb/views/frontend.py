@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, current_app, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
-from lightmdb.forms import LoginForm, UserForm, MovieForm
-from lightmdb.models import User, Movie
+from lightmdb.forms import LoginForm, UserForm
+from lightmdb.models import User
 
 from datetime import datetime
 
@@ -68,7 +68,7 @@ def initdb():
     init_db(current_app)
     user = User.get(username='admin')
     user.set_password('admin')
-    user = user.save()
+    user.save()
     return redirect(url_for('.index'))
 
 

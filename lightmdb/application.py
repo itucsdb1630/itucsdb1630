@@ -3,14 +3,12 @@ from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
 from raven.contrib.flask import Sentry
 from flask_gravatar import Gravatar
-from raven import fetch_git_sha
 import psycopg2 as dbapi2
 import os
 import json
 import re
 
 from lightmdb import views
-from lightmdb import forms
 from lightmdb import models
 
 # Get local settings
@@ -36,6 +34,7 @@ DEFAULT_BLUEPRINTS = (
     (views.contactus, "/contact"),
     (views.playlist, "/playlists"),
     (views.toplist, "/toplists"),
+    (views.movies, "/movies"),
 )
 
 login_manager = LoginManager()
