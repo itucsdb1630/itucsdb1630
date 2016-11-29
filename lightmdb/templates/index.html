@@ -5,6 +5,9 @@
     {% else %}
       <h1>Hello, Anonymouse!</h1>
     {% endif %}
+    {% for user in last_users %}
+        <div><a href="{{ url_for('user.profile', username=user.username) }}" title="User profile for {{ user }}">{{ user }}</a></div>
+    {% endfor %}
     <footer>
       <div id="datetime">{{ current_time }}</div>
     </footer>

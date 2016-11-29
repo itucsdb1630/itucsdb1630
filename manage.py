@@ -55,6 +55,7 @@ class CreateUser(Command):
         user = user.save()
         print("User %s created with id %d" % (user.username, user.pk))
 
+
 def _make_context():
     with app.app_context():
         return dict(app=app, db=get_db(app))

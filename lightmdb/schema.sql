@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
   id           SERIAL PRIMARY KEY,
   username     VARCHAR(50) UNIQUE,
@@ -9,11 +9,28 @@ CREATE TABLE users (
   deleted      BOOLEAN   DEFAULT FALSE,
   is_staff     BOOLEAN   DEFAULT FALSE
 );
+CREATE INDEX user_username_index ON users USING btree (username);
+CREATE INDEX user_email_index ON users USING btree (email);
 INSERT INTO users (
   username, email, name, is_staff
 ) VALUES (
   'admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE
 );
+
+DROP TABLE IF EXISTS user_followers CASCADE;
+CREATE TABLE user_followers (
+  id            SERIAL PRIMARY KEY,
+  follower_id   INT NOT NULL,
+  following_id  INT NOT NULL
+);
+-- ALTER TABLE ONLY user_followers
+--     ADD CONSTRAINT user_followers_follower_id_uniq UNIQUE (follower_id, following_id);
+CREATE INDEX user_followers_follower_index ON user_followers USING btree (follower_id);
+CREATE INDEX user_followers_following_index ON user_followers USING btree (following_id);
+ALTER TABLE ONLY user_followers
+    ADD CONSTRAINT user_followers_fk_follower_id FOREIGN KEY (follower_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY user_followers
+    ADD CONSTRAINT user_followers_fk_following_id FOREIGN KEY (following_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
 
 DROP TABLE IF EXISTS user_messages;
 CREATE TABLE user_messages (

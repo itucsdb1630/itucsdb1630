@@ -1,4 +1,3 @@
-{% from "helpers/_formhelpers.html" import render_field %}
 {% extends "base.html" %}
 {% block title %}{{ current_user }}{% endblock %}
 {% block content %}
@@ -13,14 +12,14 @@
   <h1>{{ user }}</h1>
   <h2>No badges yet</h2>
   <div class="row text-center profile-stats">
-    <div class="col-md-4">
-      <i class="fa fa-users"></i> 0
+    <div class="col-xs-4">
+      <i class="fa fa-users"></i> <span class="followers-count">{{ user.followers }}</span>
     </div>
-    <div class="col-md-4">
-      <i class="fa fa-comments"></i> 0
+    <div class="col-xs-4">
+      <i class="fa fa-user-plus"></i> <span class="following-count">{{ user.following }}</span>
     </div>
-    <div class="col-md-4">
-      <i class="fa fa-share-alt"></i> 0
+    <div class="col-xs-4">
+      <i class="fa fa-share-alt"></i> <span class="share-count">0</span>
     </div>
   </div>
   {% if current_user.pk == user.pk %}
@@ -28,10 +27,92 @@
       <a href="{{ url_for('user.edit') }}" class="btn btn-primary">Edit Profile</a>
       <a href="{{ url_for('user.delete') }}" class="btn btn-danger">Delete Profile</a>
     </div>
+  {% else %}
+      <div class="pb-1">
+      {% if is_following(user.pk) %}
+        <a href="#" class="btn btn-danger unfollow-button">Unfollow</a>
+        <a href="#" class="hidden btn btn-primary follow-button">Follow</a>
+      {% else %}
+        <a href="#" class="btn btn-primary follow-button">Follow</a>
+        <a href="#" class="hidden btn btn-danger unfollow-button">Unfollow</a>
+      {% endif %}
+      <div class="alert alert-dismissible alert-danger error-alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <span class="follow-error"></span>
+      </div>
+    </div>
   {% endif %}
 </div>
 <div class="container profile-container">
   <hr/>
   Status Messages
 </div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    var csrftoken = "{{ csrf_token() }}";
+    var follow_counter = $('.followers-count');
+    var follow_error = $('.follow-error');
+    var error_alert = $('.error-alert');
+
+    error_alert.hide();
+
+    $('.follow-button').on('click', function () {
+        $.ajax({
+            'beforeSend': function (request) {
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            'url': '{{ url_for('user.follow', pk=user.pk) }}',
+            'type': 'POST',
+            'data': {},
+            'success': function (data) {
+                if (data.code == 201) {
+                    $('.follow-button').addClass('hidden');
+                    $('.unfollow-button').removeClass('hidden');
+                    follow_counter.text(parseInt(follow_counter.text()) + 1);
+                } else {
+                    follow_error.text(data.message);
+                    error_alert.fadeTo(2000, 500).slideUp(500, function () {
+                        error_alert.slideUp(500);
+                    });
+                }
+            },
+            'error': function (data) {
+                follow_error.text(data.responseJSON.message);
+                error_alert.fadeTo(2000, 500).slideUp(500, function () {
+                    error_alert.slideUp(500);
+                });
+            }
+        });
+    });
+
+    $('.unfollow-button').on('click', function () {
+        $.ajax({
+            'beforeSend': function (request) {
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            'url': '{{ url_for('user.unfollow', pk=user.pk) }}',
+            'type': 'POST',
+            'data': {},
+            'success': function (data) {
+                if (data.code == 201) {
+                    $('.unfollow-button').addClass('hidden');
+                    $('.follow-button').removeClass('hidden');
+                    follow_counter.text(parseInt(follow_counter.text()) - 1);
+                } else {
+                    follow_error.text(data.message);
+                    error_alert.fadeTo(2000, 500).slideUp(500, function () {
+                        error_alert.slideUp(500);
+                    });
+                }
+            },
+            'error': function (data) {
+                follow_error.text(data.responseJSON.message);
+                error_alert.fadeTo(2000, 500).slideUp(500, function () {
+                    error_alert.slideUp(500);
+                });
+            }
+        });
+    })
+</script>
 {% endblock %}

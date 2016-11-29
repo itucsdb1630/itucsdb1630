@@ -80,6 +80,9 @@ class Database(object):
                     raise ValueError(
                         "Missing case param in filter: %s" % filters[key][0]
                     )
+            elif isinstance(filters[key], bool):
+                query += key + ' = ' + '%(where_' + key + ')s ' + case + ' '
+                where_data['where_' + key] = str(filters[key]).lower()
             elif not filters[key] and not isinstance(filters[key], int):
                 query += key + ' is NULL ' + case + ' '
             else:
