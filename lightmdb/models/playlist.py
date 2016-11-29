@@ -56,6 +56,21 @@ class Playlist(object):
         if playlist:
             return Playlist(**playlist[0])
         return None
+    
+    @classmethod
+    def append(title):
+        _movie = Movie.get(title)
+        if not _movie:
+            abort(404,{'message':'Movie Title not found.'})
+        db = get_database()
+        cursor = db.cursor
+        query = "INSERT INTO {table} " \
+                "(name, " + str(_movie.pk)  +  "  , ordering) " \
+                "VALUES" \
+                "(%(name)s, %(movie_id)s, %(ordering)s".format(table=self.PLAYLIST_MOVIES)
+        db.cursor.execute(query, dict(data))
+        db.commit()
+        return self.get(pk=self.pk)
 
 	@classmethod
 	def get_movies():
