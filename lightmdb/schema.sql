@@ -40,6 +40,7 @@ CREATE TABLE user_messages (
   time_stamp  timestamp DEFAULT CURRENT_TIMESTAMP,
   message     VARCHAR(200)
 );
+
 INSERT INTO user_messages (
   pk_sender, pk_receiver, message
 ) VALUES (
@@ -58,7 +59,32 @@ CREATE TABLE movies(
   rewatchability FLOAT
 );
 
+DROP TABLE IF EXISTS playlists;
+CREATE TABLE playlists(
+  id SERIAL PRIMARY KEY,
+  name varchar(200) UNIQUE NOT NULL,
+  is_public boolean,
+  user_id INT --this is the user who created the playlist
+);
 
+DROP TABLE IF EXISTS playlist_movies CASCADE;
+CREATE TABLE playlist_movies(
+  id SERIAL PRIMARY KEY,
+  playlist_id INT,
+  movie_id INT,
+  ordering INT --order is a reserved keyword
+);
+
+
+CREATE INDEX playlist_movies_movies_index ON playlist_movies USING btree (movie_id);
+CREATE INDEX playlist_movies_playlists_index ON playlist_movies USING btree (playlist_id);
+CREATE INDEX playlists_user_index ON playlists USING btree (user_id);
+ALTER TABLE ONLY playlists
+    ADD CONSTRAINT playlists_user_id FOREIGN KEY (user_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY playlist_movies
+    ADD CONSTRAINT playlist_movies_playlist_id FOREIGN KEY (playlist_id) REFERENCES playlists(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY playlist_movies
+    ADD CONSTRAINT playlist_movies_movie_id FOREIGN KEY (movie_id) REFERENCES movies(id) DEFERRABLE INITIALLY DEFERRED;
 
 DROP TABLE IF EXISTS contactUs;
 DROP TYPE IF EXISTS contactStatus;

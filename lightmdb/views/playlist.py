@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, current_app, request
 from datetime import datetime
 
-playlist = Blueprint('playlists', __name__)
+playlist = Blueprint('playlist', __name__)
 
 
 @playlist.route("/")
 def playlists():
-    return render_template('playlist/playlist.html')
+    return render_template('playlist/playlists.html',playlists=_playlists)
