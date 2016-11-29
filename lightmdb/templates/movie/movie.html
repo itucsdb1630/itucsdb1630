@@ -1,49 +1,51 @@
-{% from "helpers/_formhelpers.html" import render_field %}
 {% extends "base.html" %}
-{% block title %}{{ movie.title + " - "}}{{movie.year}}{% endblock %}
+{% block title %}{{ movie.title }} - {{ movie.year }}{% endblock %}
 {% block content %}
-<div>
-<h1>{{movie.title}} - {{movie.year}}</h1>
-<div>
-<button type="button" class="btn btn-sm btn-warning">Update</button>
-<button type="button" class="btn btn-sm btn-danger">Delete</button>
-</div>
-<table>
-<tr>
-<td>Stars</td>
-<td></td>
-</tr>
-<tr>
-<td>Director</td>
-<td></td>
-</tr>
-<tr>
-<td>Writer</td>
-<td></td>
-</tr>
-<tr>
-<td>Rating</td>
-<td>
-{% if movie.score %}
-{{ movie.score }}
-{% else %}
-No ratings yet!
-{% endif %}
-</td>
-</tr>
-<tr>
-<td>Rewatchability<td>
-<td>
-{% if movie.rewatchability %}
-{{ movie.rewatchability }}
-{% else %}
-No ratings yet!
-{% endif %}
-</td>
-</tr>
-<tr>
-<td>Synopsis<td><td>{{movie.synopsis}}</td>
-</tr>
-</table>
-</div>
+    <div>
+        <h1>{{ movie.title }} - {{ movie.year }}</h1>
+        <div>
+            <button type="button" class="btn btn-sm btn-warning">Update</button>
+            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+        </div>
+        <table>
+            <tr>
+                <td>Stars</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Director</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Writer</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Rating</td>
+                <td>
+                    {% if movie.score %}
+                        {{ movie.score }}
+                    {% else %}
+                        No ratings yet!
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Rewatchability
+                <td>
+                <td>
+                    {% if movie.rewatchability %}
+                        {{ movie.rewatchability }}
+                    {% else %}
+                        No ratings yet!
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Synopsis
+                <td>
+                <td>{{ movie.synopsis }}</td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
