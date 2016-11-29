@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app, request, abort, redirect, url_for
+from flask import Blueprint, flash, render_template, current_app, request, abort, redirect, url_for
 from flask_login import login_required
 from lightmdb.forms import MovieForm, UpdateMovieForm
 from lightmdb.models import Movie
@@ -37,6 +37,15 @@ def update_movie(pk):
     data = {'form': form, 'movie': _movie}
     return render_template('movie/update.html', **data)
 
+@movies.route("/delete/<pk>", methods=["GET","POST"])
+def delete_movie(pk):
+    _movie = Movie.get(pk)
+    if not _movie:
+        abort(404, {'message': 'Movie not found.'})
+	name = _movie.title
+    _movie.delete()
+    flash("Movie deleted!")
+    return redirect("/")
 
 @login_required
 @movies.route("/new/", methods=["GET", "POST"])
