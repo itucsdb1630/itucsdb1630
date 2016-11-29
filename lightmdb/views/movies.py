@@ -11,8 +11,21 @@ def movie(pk):
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
-    return render_template('movie/movie.html', pk=pk)
+    return render_template('movie/movie.html', pk=pk,movie=_movie)
 
+@movies.route("/update/<pk>", methods=["GET","POST"])
+def update_movie(pk):
+    _movie = Movie.get(pk)
+    if not _movie:
+        abort(404, {'message': 'Movie not found.'})
+    form = MovieForm(request.form)
+    if request.method == 'POST' and form.validate():
+        _movie.title = form.title.data
+        _movie.year = form.year.data
+        _movie.synopsis = form.synopsis.data
+        _movie.save()
+        return render_template('movie/movie.html', pk=pk,movie=_movie)
+    return render_template('movie/update.html', form=form,movie=_movie)
 
 @login_required
 @movies.route("/new/", methods=["GET", "POST"])
