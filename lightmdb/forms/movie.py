@@ -30,7 +30,15 @@ class MovieForm(Form):
         render_kw={
             "placeholder": "Plot Synopsis",
             "class": "form-control",
-            "type" : "textarea",
+            "type": "textarea",
         }
     )
-   
+
+
+class UpdateMovieForm(MovieForm):
+    pk = IntegerField(
+        'Identifier',
+        render_kw={
+            "class": "hidden"
+        }
+    )

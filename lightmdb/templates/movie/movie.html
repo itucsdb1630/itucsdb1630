@@ -4,8 +4,8 @@
     <div>
         <h1>{{ movie.title }} - {{ movie.year }}</h1>
         <div>
-            <p><a class="btn btn-sm btn-warning" href="update/{{ pk }}" role="button">Update</a></p>
-            <p><a class="btn btn-sm btn-danger" href="delete/{{ pk }}" role="button">Delete</a></p>
+            <p><a class="btn btn-sm btn-warning" href="{{ url_for('movies.update_movie', pk=movie.pk) }}" role="button">Update</a></p>
+            <p><a class="btn btn-sm btn-danger" href="" role="button">Delete</a></p>
         </div>
         <table>
             <tr>

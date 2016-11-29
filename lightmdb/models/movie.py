@@ -92,7 +92,10 @@ class Movie(object):
     def save(self):
         db = get_database()
         data = self.values()
-        movie = self.get(title=self.title)
+        if self.pk:
+            movie = self.get(pk=self.pk)
+        else:
+            movie = self.get(title=self.title)
         if movie:
             # update old movie
             old_data = movie.values()
