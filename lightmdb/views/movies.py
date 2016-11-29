@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, current_app, request, abort, redirect, url_for
+from flask import Blueprint, flash, render_template, current_app, request, abort, redirect, url_for
 from flask_login import login_required
-from lightmdb.forms import MovieForm
+from lightmdb.forms import MovieForm, UpdateMovieForm
 from lightmdb.models import Movie
 
 movies = Blueprint('movies', __name__)
@@ -11,11 +11,46 @@ def movie(pk):
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
-    return render_template('movie/movie.html', pk=pk)
+    return render_template('movie/movie.html', pk=pk,movie=_movie)
 
 
+@movies.route("/update/<pk>", methods=["GET","POST"])
+def update_movie(pk):
+    _movie = Movie.get(pk)
+    if not _movie:
+        abort(404, {'message': 'Movie not found.'})
+    if request.form:
+        form = UpdateMovieForm(request.form)
+    else:
+        form = UpdateMovieForm(
+            pk=_movie.pk,
+            title=_movie.title,
+            year=_movie.year,
+            synopsis=_movie.synopsis
+        )
+    if request.method == 'POST' and form.validate():
+        _movie.title = form.title.data
+        _movie.year = form.year.data
+        _movie.synopsis = form.synopsis.data
+        _movie.save()
+        return redirect(url_for('.movie', pk=pk))
+    data = {'form': form, 'movie': _movie}
+    return render_template('movie/update.html', **data)
+
+
+@movies.route("/delete/<pk>", methods=["GET","POST"])
 @login_required
+def delete_movie(pk):
+    _movie = Movie.get(pk)
+    if not _movie:
+        abort(404, {'message': 'Movie not found.'})
+    _movie.delete()
+    flash("Movie deleted!")
+    return redirect("/")
+
+
 @movies.route("/new/", methods=["GET", "POST"])
+@login_required
 def add_movie():
     form = MovieForm(request.form)
     if request.method == 'POST' and form.validate():
