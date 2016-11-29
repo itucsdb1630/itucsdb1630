@@ -12,6 +12,7 @@ def get_database():
 class User(UserMixin):
     """User Model."""
     TABLE_NAME = 'users'
+
     def __init__(self, pk=None, username=None, password=None, email=None, name=None,
                  confirmed_at=None, deleted=False, is_staff=False):
         self.pk = pk
@@ -96,6 +97,7 @@ class User(UserMixin):
     def filter(cls, **kwargs):
         db = get_database()
         cursor = db.cursor
+        filter_data = {}
         query = "SELECT * FROM " + cls.TABLE_NAME
         if kwargs:
             filter_query, filter_data = db.where_builder(kwargs)

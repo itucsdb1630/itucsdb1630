@@ -9,10 +9,10 @@ user = Blueprint('user', __name__)
 @user.route("/<username>")
 @login_required
 def profile(username):
-    user = User.get(username=username)
-    if not user:
+    _user = User.get(username=username)
+    if not _user:
         abort(404, {'message': "User not found."})
-    return render_template('user/profile.html', user=user)
+    return render_template('user/profile.html', user=_user)
 
 
 @user.route("/me")
