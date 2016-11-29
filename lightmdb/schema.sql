@@ -60,7 +60,7 @@ CREATE TABLE movies(
 
 
 
-DROP TABLE IF EXISTS contactUs;
+DROP TABLE IF EXISTS contactUs CASCADE;
 DROP TYPE IF EXISTS contactStatus;
 CREATE TYPE contactStatus AS ENUM ('new','replied','waiting','spam','closed');
 CREATE TABLE contactUs(
@@ -77,3 +77,18 @@ CREATE TABLE contactUs(
 INSERT INTO contactUs (title,content,email,phone) 
     VALUES ('Want to ask','How can I change my password','user@example.com','555111222333');
 
+DROP TABLE IF EXISTS contactComments CASCADE;
+CREATE TABLE contactComments(
+  id SERIAL PRIMARY KEY,
+  pk_contact INT NOT NULL,
+  comment varchar(255) NOT NULL,
+  sendMail boolean NOT NULL ,
+  sendTime timestamp DEFAULT CURRENT_TIMESTAMP,
+  deleted boolean DEFAULT false
+);
+
+-- ALTER TABLE ONLY contactComments
+--     ADD CONSTRAINT contact_id_uniq UNIQUE (pk_contact);
+CREATE INDEX contact_id ON contactComments USING btree (pk_contact);
+ALTER TABLE ONLY contactComments
+    ADD CONSTRAINT comment_fk_for_contact_id FOREIGN KEY (pk_contact) REFERENCES contactUs(id) DEFERRABLE INITIALLY DEFERRED;

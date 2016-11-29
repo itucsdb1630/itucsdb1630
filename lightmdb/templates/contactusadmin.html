@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Contact Us Admin{% endblock %}
+{% block content %}
+    <div class ='row' >
+    <div class = 'col-lg-4'></div>
+    <div class = 'col-lg-4'><h2 class="center-block text-center">SENT QUESTIONS</h2> </div>
+    <div class = 'col-lg-4'></div>
+  <div class="row extra-pt5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 text-center">
+    <form method="post" action="/admin/contactus/">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <div class="row">
+        <div class="col-md-12 center-block">
+            <p>Choose types</p>
+            <label>
+                <input name="new" type="checkbox" checked/>
+                New
+            </label>
+            <label>
+                <input name="replied" type="checkbox" />
+                Replied
+            </label>
+            <label>
+                <input name="waiting" type="checkbox" />
+                Waiting
+            </label>
+            <label>
+                <input name="spam" type="checkbox" />
+                Spam
+            </label>
+            <label>
+                <input name="closed" type="checkbox" />
+                Closed
+            </label>
+            <button name="show" value="show" class="btn btn-success btn-xs"><i class="fa fa-search"></i>Show</button>
+        </div>
+    </div>
+      <table class="table table-bordered table-responsive">
+      <thead>
+           <tr>
+                {% for col in thead %}
+                    {% if col==thead[0] %}
+                        <td style="min-width: 200px"> {{ col }} </td>
+                    {% else %}
+                        <td> {{ col }} </td>
+                    {% endif %}
+                {% endfor %}
+           </tr>
+      </thead>
+          {% for row in table %}
+           <tr>
+                {% for col in row %}
+                    {% if col==row[0] %}
+                        <td>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select  class="form-control" name="status">
+                                        <option value="replied">Replied</option>
+                                        <option value="waiting">Waiting</option>
+                                        <option value="spam">Spam</option>
+                                        <option value="closed">Closed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="form-control btn btn-info btn-xs" name='update' value='{{ col }}' ><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                        </td>
+                    {% else %}
+                        <td> {{ col }} </td>
+                    {% endif %}
+                {% endfor %}
+                <td><button class="form-control btn btn-danger btn-xs" name="delete" value="{{ row[0] }}"><i class="fa fa-eraser"></i>Delete</button></td>
+           </tr>
+        {% endfor %}
+
+
+        </table>
+    </form>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+{% endblock %}
