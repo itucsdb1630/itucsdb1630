@@ -10,8 +10,9 @@ frontend = Blueprint('frontend', __name__)
 
 @frontend.route("/")
 def index():
-    now = datetime.now()
-    return render_template('index.html', current_time=now.ctime())
+    last_users = User.filter(limit=25, deleted=False)
+    data = {'last_users': last_users}
+    return render_template('index.html', **data)
 
 
 @frontend.route("/login/", methods=["GET", "POST"])
