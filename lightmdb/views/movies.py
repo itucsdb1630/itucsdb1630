@@ -37,18 +37,20 @@ def update_movie(pk):
     data = {'form': form, 'movie': _movie}
     return render_template('movie/update.html', **data)
 
+
 @movies.route("/delete/<pk>", methods=["GET","POST"])
+@login_required
 def delete_movie(pk):
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
-	name = _movie.title
     _movie.delete()
     flash("Movie deleted!")
     return redirect("/")
 
-@login_required
+
 @movies.route("/new/", methods=["GET", "POST"])
+@login_required
 def add_movie():
     form = MovieForm(request.form)
     if request.method == 'POST' and form.validate():
