@@ -23,3 +23,14 @@ class MovieForm(Form):
             "max": 2200
         }
     )
+    synopsis = StringField('Synopsis', [
+            validators.Length(min=5, max=254),
+            validators.DataRequired("Please, enter short plot synopsis.")
+        ],
+        render_kw={
+            "placeholder": "Plot Synopsis",
+            "class": "form-control",
+            "type" : "textarea",
+        }
+    )
+   

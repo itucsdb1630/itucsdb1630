@@ -20,7 +20,7 @@ def add_movie():
     form = MovieForm(request.form)
     if request.method == 'POST' and form.validate():
         # @TODO Check if movie with same title exists
-        _movie = Movie(title=form.title.data, year=form.year.data)
+        _movie = Movie(title=form.title.data, year=form.year.data, synopsis=form.synopsis.data)
         _movie = _movie.save()
         return redirect(url_for('.movie', pk=_movie.pk))
     return render_template('movie/add.html', form=form)
