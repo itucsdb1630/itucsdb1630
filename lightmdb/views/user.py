@@ -7,7 +7,6 @@ user = Blueprint('user', __name__)
 
 
 @user.route("/<username>")
-@login_required
 def profile(username):
     _user = User.get(username=username)
     if not _user:
