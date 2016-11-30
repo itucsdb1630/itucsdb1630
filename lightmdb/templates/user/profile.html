@@ -29,7 +29,7 @@
     </div>
   {% else %}
       <div class="pb-1">
-      {% if current_user.is_authentificated %}
+      {% if current_user.is_authenticated %}
       {% if is_following(user.pk) %}
         <a href="#" class="btn btn-danger unfollow-button">Unfollow</a>
         <a href="#" class="hidden btn btn-primary follow-button">Follow</a>
