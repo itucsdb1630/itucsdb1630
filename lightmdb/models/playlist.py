@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import current_app, abort
 from collections import OrderedDict
 from lightmdb.models import Movie, User
 
@@ -9,15 +9,15 @@ def get_database():
 
 class Playlist(object):
     """Playlist Model."""
-	PLAYLIST_MOVIES= 'playlist_movies'
-	MOVIES_TABLE = 'movies'
+    PLAYLIST_MOVIES= 'playlist_movies'
+    MOVIES_TABLE = 'movies'
     TABLE_NAME = 'playlists'
 
-    def __init__(self, pk=None, name=None, is_public=False, user=None):
+    def __init__(self, pk=None, name=None, is_public=False, user_id=None):
         self.pk = pk
         self.name = name
-		self.user = user
-		self.is_public = is_public
+        self.user_id = user_id
+        self.is_public = is_public
 
     def get_id(self):
         return str(self.pk)
@@ -27,7 +27,7 @@ class Playlist(object):
             ('pk', self.pk),
             ('name', self.name),
             ('is_public', self.is_public),
-            ('user', self.user),
+            ('user_id', self.user_id),
         ])
         return data
 
@@ -45,7 +45,7 @@ class Playlist(object):
                 "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME),
                 {'id': pk}
             )
-        elif title:
+        elif name:
             cursor.execute(
                 "SELECT * FROM {table} WHERE name=%(name)s".format(table=cls.TABLE_NAME),
                 {'name': name}
@@ -58,7 +58,7 @@ class Playlist(object):
         return None
     
     @classmethod
-    def append(title):
+    def append(self, title):
         _movie = Movie.get(title)
         if not _movie:
             abort(404,{'message':'Movie Title not found.'})
@@ -68,23 +68,23 @@ class Playlist(object):
                 "(name, " + str(_movie.pk)  +  "  , ordering) " \
                 "VALUES" \
                 "(%(name)s, %(movie_id)s, %(ordering)s".format(table=self.PLAYLIST_MOVIES)
-        db.cursor.execute(query, dict(data))
+        db.cursor.execute(query)
         db.commit()
         return self.get(pk=self.pk)
 
-	@classmethod
-	def get_movies():
-		movie_ids = []
+    @classmethod
+    def get_movies(self):
+        movie_ids = []
         db = get_database()
         cursor = db.cursor
         cursor.execute(
-            "SELECT movie_id FROM {table} WHERE playlist_id=%(playlist_id)s ORDER BY ORDERING ASC".format(table=cls.PLAYLIST_MOVIES), {'playlist_id': pk} 
+            "SELECT movie_id FROM {table} WHERE playlist_id=%(playlist_id)s ORDER BY ORDERING ASC".format(table=self.PLAYLIST_MOVIES), {'playlist_id': self.pk}
         )  
         movie_ids = db.fetch_execution(cursor)
         movies = []
         for item in movie_ids:
             movies.append(Movie.get(item))
-		return movies
+        return movies
 
 
     @classmethod
@@ -118,7 +118,7 @@ class Playlist(object):
         if self.pk:
             playlist = self.get(pk=self.pk)
         else:
-            playlist = self.get(title=self.title)
+            playlist = self.get(name=self.name)
         if playlist:
             # update old playlist
             old_data = playlist.values()
@@ -143,10 +143,10 @@ class Playlist(object):
         # new playlist
         del data['pk']
         query = "INSERT INTO {table} " \
-                "(name, is_public, user) " \
+                "(name, is_public, user_id) " \
                 "VALUES" \
-                "(%(name)s, %(is_public)s, %(user_id)s".format(table=self.TABLE_NAME)
-        db.cursor.execute(query, dict(data))
+                "(%(name)s, %(is_public)s, %(user_id)s)".format(table=self.TABLE_NAME)
+        db.cursor.execute(query,dict(data))
         db.commit()
-        return self.get(title=self.title)
+        return self.get(name=self.name)
 

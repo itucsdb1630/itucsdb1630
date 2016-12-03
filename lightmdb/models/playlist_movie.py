@@ -16,18 +16,18 @@ class Playlist_Movie():
 
     @classmethod
     def get(cls, pk=None):
-    db = get_database()
-    cursor = db.cursor
-    if pk:
-        cursor.execute(
-            "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME), {'id':pk}
+        db = get_database()
+        cursor = db.cursor
+        if pk:
+            cursor.execute(
+                "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME), {'id':pk}
     )
-    else:
+        else:
+            return None
+        playlist_movie = db.fetch_execution(cursor)
+        if playlist_movie:
+            return Playlist_Movie(**playlist_movie[0])
         return None
-    playlist_movie = db.fetch_execution(cursor)
-    if playlist_movie:
-        return Playlist_Movie(**playlist_movie[0])
-    return None
 
     def delete(self):
         if not self.pk:
@@ -35,7 +35,7 @@ class Playlist_Movie():
         db = get_database()
         cursor = db.cursor
         query = "DELETE FROM {table} WHERE id=%(id)s".format(table=self.TABLE_NAME)
-        cursor.execute(query, 'id':self.pk})
+        cursor.execute(query, {'id':self.pk})
         db.commit()
 
 

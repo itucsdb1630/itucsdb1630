@@ -32,7 +32,7 @@ DEFAULT_BLUEPRINTS = (
     (views.user, "/profile"),
     (views.messenger, "/messenger"),
     (views.contactus, "/contact"),
-    (views.playlist, "/playlists"),
+    (views.playlist, "/playlist"),
     (views.toplist, "/toplists"),
     (views.movies, "/movies"),
 )
