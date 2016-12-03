@@ -46,7 +46,7 @@ INSERT INTO user_messages (
   1, 2, 'Are you even exist ? Please do not tell anybody but I believe I am not.'
 );
 
-DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS movies CASCADE;
 CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
   title varchar(200) UNIQUE NOT NULL,
