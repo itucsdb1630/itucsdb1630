@@ -29,7 +29,7 @@ def login():
             if _next:
                 return redirect(_next or url_for('.index'))
         else:
-            return render_template('user/login.html', form=form, errors="Wronge Credentials")
+            return render_template('user/login.html', form=form, errors="Wrong Credentials")
     return render_template('user/login.html', form=form)
 
 
@@ -102,9 +102,23 @@ def initdb():
     if current_user.is_authenticated:
         logout_user()
     init_db(current_app)
+
     user = User.get(username='admin')
     user.set_password('admin')
-    user.save()
+    user = user.save()
+
+    user = User.get(username='tonystark')
+    user.set_password('ironman')
+    user = user.save()
+
+    user = User.get(username='elonmusk')
+    user.set_password('tesla')
+    user = user.save()
+
+    user = User.get(username='thor')
+    user.set_password('mjölnir')
+    user = user.save()
+
     return redirect(url_for('.index'))
 
 

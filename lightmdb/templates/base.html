@@ -31,8 +31,8 @@
                 <li><a href="{{ url_for('contactus.contact') }}">Contact</a></li>
                 <li><a href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>
                 {% if current_user.is_authenticated %}
-                  <li><a href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>
-                  <li><a href="/messenger">Messenger</a></li>
+                    <li><a href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>
+                    <li><a href="{{ url_for('messenger.main') }}">Messenger</a></li>
                 {% endif %}
             </ul>
             <form class="navbar-form navbar-left" role="search">
