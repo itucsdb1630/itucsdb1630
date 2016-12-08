@@ -77,12 +77,12 @@ def create_app():
     )
 
     # Set sentry for debugging
-    if os.getenv('SENTRY_DSN'):
-        sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
-        sentry.init_app(app)
-    elif getattr(settings, 'SENTRY_DSN', None):
-        sentry = Sentry(app, dsn=getattr(settings, 'SENTRY_DSN', None))
-        sentry.init_app(app)
+    # if os.getenv('SENTRY_DSN'):
+    #     sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
+    #     sentry.init_app(app)
+    # elif getattr(settings, 'SENTRY_DSN', None):
+    #     sentry = Sentry(app, dsn=getattr(settings, 'SENTRY_DSN', None))
+    #     sentry.init_app(app)
     # Set views
     for view, url_prefix in DEFAULT_BLUEPRINTS:
         app.register_blueprint(view, url_prefix=url_prefix)
