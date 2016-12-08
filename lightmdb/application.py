@@ -1,7 +1,7 @@
 from flask import Flask, g
 from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
-from raven.contrib.flask import Sentry
+# from raven.contrib.flask import Sentry
 from flask_gravatar import Gravatar
 import psycopg2 as dbapi2
 import os
