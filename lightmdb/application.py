@@ -1,7 +1,7 @@
 from flask import Flask, g
 from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
-# from raven.contrib.flask import Sentry
+from raven.contrib.flask import Sentry
 from flask_gravatar import Gravatar
 import psycopg2 as dbapi2
 import os
@@ -77,12 +77,12 @@ def create_app():
     )
 
     # Set sentry for debugging
-    # if os.getenv('SENTRY_DSN'):
-    #     sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
-    #     sentry.init_app(app)
-    # elif getattr(settings, 'SENTRY_DSN', None):
-    #     sentry = Sentry(app, dsn=getattr(settings, 'SENTRY_DSN', None))
-    #     sentry.init_app(app)
+    if os.getenv('SENTRY_DSN'):
+        sentry = Sentry(app, dsn=os.getenv('SENTRY_DSN'))
+        sentry.init_app(app)
+    elif getattr(settings, 'SENTRY_DSN', None):
+        sentry = Sentry(app, dsn=getattr(settings, 'SENTRY_DSN', None))
+        sentry.init_app(app)
     # Set views
     for view, url_prefix in DEFAULT_BLUEPRINTS:
         app.register_blueprint(view, url_prefix=url_prefix)
