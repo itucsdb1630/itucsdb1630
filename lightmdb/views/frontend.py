@@ -125,3 +125,9 @@ def initdb():
 @frontend.route("/legal/")
 def privacy():
     return render_template('privacy.html')
+
+
+@frontend.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()

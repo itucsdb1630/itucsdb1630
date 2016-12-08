@@ -49,3 +49,9 @@ def delete_message(message_pk, pk):
     user_list = User.filter()
     receiver = User.get(pk=pk)
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver)
+
+
+@messenger.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()

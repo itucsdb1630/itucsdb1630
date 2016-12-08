@@ -15,6 +15,7 @@ def movie(pk):
 
 
 @movies.route("/update/<pk>", methods=["GET","POST"])
+@login_required
 def update_movie(pk):
     _movie = Movie.get(pk)
     if not _movie:
@@ -59,3 +60,9 @@ def add_movie():
         _movie = _movie.save()
         return redirect(url_for('.movie', pk=_movie.pk))
     return render_template('movie/add.html', form=form)
+
+
+@movies.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()
