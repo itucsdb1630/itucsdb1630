@@ -17,7 +17,7 @@ app = create_app()
 
 
 @app.teardown_appcontext
-def close_context(error=None):
+def close_connection(error=None):
     close_db()
 
 HOST = None
