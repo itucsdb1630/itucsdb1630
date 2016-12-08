@@ -2,6 +2,7 @@ from .common import Database
 from .user import User, Follower
 from .contactus import ContactMessage
 from .contactComments import ContactComment
+from .messenger import Messenger
 from .movie import Movie
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     'ContactMessage',
     'ContactComment',
     'Movie',
+    'Messenger',
 ]
 

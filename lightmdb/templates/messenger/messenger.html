@@ -2,159 +2,115 @@
 {% extends "base.html" %}
 {% block title %}Messenger{% endblock %}
 {% block content %}
-
+    {%  set pk = 0 %}
     <div class="container border">
         <div class="row">
             <div class="col-sm-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <span class="glyphicon glyphicon-user"></span> <b>People</b>
+                        <span class="glyphicon glyphicon-user">
+                        </span>
+                        <b>
+                            People
+                        </b>
                     </div>
                     <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-info">Emin Mastizada</a>
-                        <a href="#" class="list-group-item">Memduh Gökırmak</a>
-                        <a href="#" class="list-group-item">Onur Can Çarkçı</a>
-                        <a href="#" class="list-group-item">Seda Bilgin</a>
+                        {% for user in user_list %}
+                                <a href="{{ url_for('messenger.get_messages', pk=user.pk) }}" class="list-group-item">
+                                    {{ user }}
+                                </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
             <div class="col-sm-8">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <span class="glyphicon glyphicon-comment"></span> Chat with <b>Emin Mastizada</b>
+                        <span class="glyphicon glyphicon-comment">
+                        </span>
+                        Chat with
+                        <b>
+                            {{ receiver.name }}
+                            {% set pk = receiver.pk  %}
+                        </b>
                     </div>
                     <div class="panel-default">
                         <div class="panel-body">
                             <ul class="chat">
-                                <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
-                                 width="50" height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Emin Mastizada</strong>
-                                            <small class="pull-right text-muted">
-                                                <span class="glyphicon glyphicon-time"></span>12 mins ago
-                                            </small>
+                                {% for message in messages %}
+                                {% if current_user.pk|int() != message.sender_pk|int() %}
+                                    <li class="left clearfix">
+                                        <span class="chat-img pull-left">
+                                            <img src="{{ receiver.email | gravatar }}" class="img-circle" alt="username" width="50" height="50">
+                                        </span>
+                                        <div class="chat-body clearfix">
+                                            <div class="header">
+                                                <strong class="primary-font">
+                                                    {{ receiver.name }}
+                                                </strong>
+                                                <small class="pull-right text-muted">
+                                                    <span class="glyphicon glyphicon-time">
+                                                    </span>
+                                                    {{ message.time_stamp }}&nbsp;|&nbsp;
+                                                     <a href="{{ url_for('messenger.delete_message', message_pk=message.pk, pk=receiver.pk) }}">
+                                                         <i>delete</i>
+                                                     </a>
+                                                </small>
+                                            </div>
+                                            <p>
+                                                {{ message.message }}
+                                            </p>
                                         </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
-                                 height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted"><span
-                                                    class="glyphicon glyphicon-time"></span>13 mins ago
-                                            </small>
-                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
+                                    </li>
+                                {% else %}
+                                    <li class="right clearfix">
+                                        <span class="chat-img pull-right">
+                                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50" height="50">
+                                        </span>
+                                        <div class="chat-body clearfix">
+                                            <div class="header">
+                                                <small class=" text-muted">
+                                                     <a href="{{ url_for('messenger.delete_message', message_pk=message.pk, pk=receiver.pk) }}">
+                                                         <i>delete</i>
+                                                     </a>
+                                                    &nbsp;|&nbsp;
+                                                    <span class="glyphicon glyphicon-time">
+                                                    </span>
+                                                    {{ message.time_stamp }}
+                                                </small>
+                                                <strong class="pull-right primary-font">
+                                                    {{ current_user.name }}
+                                                </strong>
+                                            </div>
+                                            <p>
+                                                {{ message.message }}
+                                            </p>
                                         </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
-                                 width="50" height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Emin Mastizada</strong>
-                                            <small class="pull-right text-muted">
-                                                <span class="glyphicon glyphicon-time"></span>14 mins ago
-                                            </small>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
-                                 height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted"><span
-                                                    class="glyphicon glyphicon-time"></span>15 mins ago
-                                            </small>
-                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="{{ 'emin@mastizada.com' | gravatar }}" class="img-circle" alt="username"
-                                 width="50" height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">Emin Mastizada</strong>
-                                            <small class="pull-right text-muted">
-                                                <span class="glyphicon glyphicon-time"></span>14 mins ago
-                                            </small>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username" width="50"
-                                 height="50">
-                        </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted"><span
-                                                    class="glyphicon glyphicon-time"></span>15 mins ago
-                                            </small>
-                                            <strong class="pull-right primary-font">{{ current_user.username }}</strong>
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Curabitur bibendum ornare
-                                            dolor, quis ullamcorper ligula sodales.
-                                        </p>
-                                    </div>
-                                </li>
+                                    </li>
+
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </div>
-                        <div class="panel-footer">
-                            <div class="input-group">
-                                <input id="btn-input" type="text" class="form-control input-sm"
-                                       placeholder="Type your message here..."/>
-                                <span class="input-group-btn">
-                            <button class="btn btn-info btn-sm" id="btn-chat">
-                                Send</button>
-                        </span>
-                            </div>
-                        </div>
+                            <form method='post' action="/messenger/sendmessage/{{ pk }}/">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                            <input id="btn-input" name="message" type="text" class="form-control input-sm" placeholder="Type your message here..."/>
+                                            <span class="input-group-btn">
+                                                <button href="{{ url_for('messenger.send_message', pk = pk) }}" class="btn btn-info btn-sm" id="btn-chat">
+                                                    Send
+                                                </button>
+                                            </span>
+                                    </div>
+                                </div>
+                            </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-
 {% block extra_css %}
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/messenger.css') }}"/>
-
 {% endblock %}
