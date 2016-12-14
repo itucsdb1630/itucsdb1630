@@ -70,6 +70,24 @@ class User(UserMixin):
             return result[0]
         return 0
 
+    @property
+    def friendlist(self):
+        """List of users following each other.
+
+        :return: list of users
+        """
+        db = get_database()
+        cursor = db.cursor
+        cursor.execute("SELECT base.following_id FROM {table} AS base INNER JOIN {table} AS curr ON base.following_id = curr.follower_id WHERE base.follower_id=%(pk)s".format(
+            table=Follower.TABLE_NAME),
+            {'pk': self.pk}
+        )
+        result = cursor.fetchall()
+        users = []
+        for user in result:
+            users.append(User.get(user))
+        return users
+
     def get_id(self):
         return str(self.pk)
 
