@@ -12,12 +12,12 @@ CREATE TABLE users (
 CREATE INDEX user_username_index ON users USING btree (username);
 CREATE INDEX user_email_index ON users USING btree (email);
 INSERT INTO users (
-  id, username, email, name, is_staff
+  username, email, name, is_staff
 ) VALUES
-  (1, 'admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE),
-  (2, 'tonystark', 'tonystark@lightmdb.org', 'Tony Stark', FALSE),
-  (3, 'elonmusk', 'elonmusk@lightmdb.org', 'Elon Musk', FALSE),
-  (4, 'thor', 'thorodinson@lightmdb.org', 'Thor Odinson', FALSE);
+  ('admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE),
+  ('tonystark', 'tonystark@lightmdb.org', 'Tony Stark', FALSE),
+  ('elonmusk', 'elonmusk@lightmdb.org', 'Elon Musk', FALSE),
+  ('thor', 'thorodinson@lightmdb.org', 'Thor Odinson', FALSE);
 
 DROP TABLE IF EXISTS user_followers CASCADE;
 CREATE TABLE user_followers (
@@ -34,7 +34,8 @@ ALTER TABLE ONLY user_followers
 ALTER TABLE ONLY user_followers
     ADD CONSTRAINT user_followers_fk_following_id FOREIGN KEY (following_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
 
-INSERT INTO user_followers (follower_id, following_id) VALUES (2, 3), (3, 2);
+--INSERT INTO user_followers (follower_id, following_id) VALUES (2, 3), (3, 2);
+--@TODO handle it in init code, as serial id fails when using id to add users.
 
 DROP TABLE IF EXISTS user_messages CASCADE;
 CREATE TABLE user_messages (
