@@ -1,11 +1,15 @@
-{% extends "base.html" %}
 {% from "helpers/_formhelpers.html" import render_field %}
-{% block title %}Sign In{% endblock %}
+{% extends "base.html" %}
+{% block title %}Contact Us{% endblock %}
 {% block content %}
+    <div class ='row' >
+    <div class = 'col-lg-4'></div>
+    <div class = 'col-lg-4'><h2 class="center-block text-center"><i class = 'fa fa-question-circle'></i> Please Ask <i class = 'fa fa-question-circle'></i></h2> </div>
+    <div class = 'col-lg-4'></div>
   <div class="row extra-pt5">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-center">
-      <form method=post action="{{ url_for('.login') }}?next={{ request.args.get('next', '/') }}">
+      <form method=post action="/contactus/">
         <fieldset>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           {% if errors %}
@@ -14,10 +18,11 @@
               <strong>Error!</strong> {{ errors }}
             </div>
           {% endif %}
-          {{ render_field(form.username) }}
-          {{ render_field(form.password) }}
+          {% for field in form %}
+            {{ render_field(field) }}
+          {% endfor %}
           <div class="form-group">
-            <button type="submit" class="btn btn-primary">Sign In</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </div>
         </fieldset>
       </form>

@@ -7,7 +7,6 @@ user = Blueprint('user', __name__)
 
 
 @user.route("/<username>")
-@login_required
 def profile(username):
     _user = User.get(username=username)
     if not _user:
@@ -100,3 +99,9 @@ def user_details():
     def is_following(pk):
         return current_user.is_following(pk)
     return dict(is_following=is_following)
+
+
+@user.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()

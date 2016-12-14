@@ -13,9 +13,11 @@ CREATE INDEX user_username_index ON users USING btree (username);
 CREATE INDEX user_email_index ON users USING btree (email);
 INSERT INTO users (
   username, email, name, is_staff
-) VALUES (
-  'admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE
-);
+) VALUES
+  ('admin', 'info@lightmdb.org', 'LightMdb Admin', TRUE),
+  ('tonystark', 'tonystark@lightmdb.org', 'Tony Stark', FALSE),
+  ('elonmusk', 'elonmusk@lightmdb.org', 'Elon Musk', FALSE),
+  ('thor', 'thorodinson@lightmdb.org', 'Thor Odinson', FALSE);
 
 DROP TABLE IF EXISTS user_followers CASCADE;
 CREATE TABLE user_followers (
@@ -32,20 +34,21 @@ ALTER TABLE ONLY user_followers
 ALTER TABLE ONLY user_followers
     ADD CONSTRAINT user_followers_fk_following_id FOREIGN KEY (following_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
 
-DROP TABLE IF EXISTS user_messages;
+DROP TABLE IF EXISTS user_messages CASCADE;
 CREATE TABLE user_messages (
   id          SERIAL PRIMARY KEY,
-  pk_sender   INT,
-  pk_receiver INT,
+  sender_pk   INT,
+  receiver_pk INT,
   time_stamp  timestamp DEFAULT CURRENT_TIMESTAMP,
   message     VARCHAR(200)
 );
 
 INSERT INTO user_messages (
-  pk_sender, pk_receiver, message
-) VALUES (
-  1, 2, 'Are you even exist ? Please do not tell anybody but I believe I am not.'
-);
+  sender_pk, receiver_pk, message
+) VALUES (  3, 2, 'Are you even exist ? Please do not tell anybody but I believe I am not.'),
+( 3, 1, 'Hey you!'),
+(2 ,3 , 'Sshhh! It is between us.' ),
+  (1,3,'Yo yo...');
 
 DROP TABLE IF EXISTS movies;
 CREATE TABLE movies(
@@ -86,20 +89,35 @@ ALTER TABLE ONLY playlist_movies
 ALTER TABLE ONLY playlist_movies
     ADD CONSTRAINT playlist_movies_movie_id FOREIGN KEY (movie_id) REFERENCES movies(id) DEFERRABLE INITIALLY DEFERRED;
 
-DROP TABLE IF EXISTS contactUs;
+DROP TABLE IF EXISTS contactUs CASCADE;
 DROP TYPE IF EXISTS contactStatus;
-CREATE TYPE contactStatus AS ENUM ('new','replied','waiting','spam','closed');
-CREATE TABLE contactUs(
+CREATE TYPE contactStatus AS ENUM ('new', 'replied', 'waiting', 'spam', 'closed');
+CREATE TABLE contactUs (
+  id       SERIAL PRIMARY KEY,
+  title    VARCHAR(100) NOT NULL,
+  content  VARCHAR(255) NOT NULL,
+  email    VARCHAR(50)  NOT NULL,
+  phone    VARCHAR(50)  NOT NULL,
+  status   contactStatus DEFAULT 'new',
+  sendTime timestamp     DEFAULT CURRENT_TIMESTAMP,
+  deleted  BOOLEAN       DEFAULT FALSE
+);
+
+INSERT INTO contactUs (title, content, email, phone)
+VALUES ('Want to ask', 'How can I change my password', 'user@example.com', '555111222333');
+
+DROP TABLE IF EXISTS contactComments CASCADE;
+CREATE TABLE contactComments(
   id SERIAL PRIMARY KEY,
-  title varchar(100) NOT NULL,
-  content varchar(255) NOT NULL,
-  email varchar(50) NOT NULL,
-  phone varchar(50) NOT NULL,
-  status contactStatus DEFAULT 'new',
+  pk_contact INT NOT NULL,
+  comment varchar(255) NOT NULL,
+  sendMail boolean NOT NULL ,
   sendTime timestamp DEFAULT CURRENT_TIMESTAMP,
   deleted boolean DEFAULT false
 );
 
-INSERT INTO contactUs (title,content,email,phone) 
-    VALUES ('Want to ask','How can I change my password','user@example.com','555111222333');
-
+-- ALTER TABLE ONLY contactComments
+--     ADD CONSTRAINT contact_id_uniq UNIQUE (pk_contact);
+CREATE INDEX contact_id ON contactComments USING btree (pk_contact);
+ALTER TABLE ONLY contactComments
+    ADD CONSTRAINT comment_fk_for_contact_id FOREIGN KEY (pk_contact) REFERENCES contactUs(id) DEFERRABLE INITIALLY DEFERRED;

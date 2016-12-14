@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ current_user }}{% endblock %}
+{% block title %}{{ user }}{% endblock %}
 {% block content %}
 {% block containerclass %}{% endblock %}
 <div class="cover">
@@ -29,6 +29,7 @@
     </div>
   {% else %}
       <div class="pb-1">
+      {% if current_user.is_authenticated %}
       {% if is_following(user.pk) %}
         <a href="#" class="btn btn-danger unfollow-button">Unfollow</a>
         <a href="#" class="hidden btn btn-primary follow-button">Follow</a>
@@ -40,6 +41,7 @@
           <button type="button" class="close" data-dismiss="alert">&times;</button>
           <span class="follow-error"></span>
       </div>
+      {% endif %}
     </div>
   {% endif %}
 </div>
@@ -84,6 +86,7 @@
                 });
             }
         });
+        return false;
     });
 
     $('.unfollow-button').on('click', function () {
@@ -113,6 +116,7 @@
                 });
             }
         });
+        return false;
     })
 </script>
 {% endblock %}

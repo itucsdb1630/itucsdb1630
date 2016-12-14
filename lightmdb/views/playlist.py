@@ -19,6 +19,7 @@ def add_playlist():
         return redirect(url_for('.playlists', pk=_playlist.pk))
     return render_template('playlist/add.html',form=form)
 
+
 @playlist.route("/<pk>",methods = ["GET","POST"])
 def playlists(pk):
     _playlist = Playlist.get(pk)
@@ -28,3 +29,13 @@ def playlists(pk):
         _movies = _playlist.get_movies()
     return render_template('playlist/playlist.html', movies = _movies, playlist = _playlist)
 
+
+@playlist.route("/")
+def playlists():
+    return render_template('playlist/playlist.html')
+
+
+@playlist.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()

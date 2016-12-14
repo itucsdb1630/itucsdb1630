@@ -17,7 +17,7 @@ app = create_app()
 
 
 @app.teardown_appcontext
-def close_context(error=None):
+def close_connection(error=None):
     close_db()
 
 HOST = None
@@ -63,7 +63,7 @@ def _make_context():
 manager.add_command('shell', Shell(make_context=_make_context, use_ipython=True))
 manager.add_command('migrate', Migration())
 manager.add_command('createuser', CreateUser())
-manager.add_command('runserver', Server(host=HOST, port=PORT, threaded=True))
+manager.add_command('runserver', Server(host=HOST, port=PORT, processes=3))
 
 if __name__ == '__main__':
     manager.run()

@@ -73,21 +73,6 @@ class Playlist(object):
         return self.get(pk=self.pk)
 
     @classmethod
-    def get_movies(self):
-        movie_ids = []
-        db = get_database()
-        cursor = db.cursor
-        cursor.execute(
-            "SELECT movie_id FROM {table} WHERE playlist_id=%(playlist_id)s ORDER BY ORDERING ASC".format(table=self.PLAYLIST_MOVIES), {'playlist_id': self.pk}
-        )  
-        movie_ids = db.fetch_execution(cursor)
-        movies = []
-        for item in movie_ids:
-            movies.append(Movie.get(item))
-        return movies
-
-
-    @classmethod
     def filter(cls, **kwargs):
         db = get_database()
         cursor = db.cursor
@@ -102,6 +87,20 @@ class Playlist(object):
         for playlist in playlists:
             result.append(Playlist(**playlist))
         return result
+
+    def get_movies(self):
+        movie_ids = []
+        db = get_database()
+        cursor = db.cursor
+        cursor.execute(
+            "SELECT movie_id FROM {table} WHERE playlist_id=%(playlist_id)s ORDER BY ORDERING ASC".format(table=self.PLAYLIST_MOVIES), {'playlist_id': self.pk}
+        )
+        movie_ids = db.fetch_execution(cursor)
+        movies = []
+        for item in movie_ids:
+            movies.append(Movie.get(item))
+        return movies
+
 
     def delete(self):
         if not self.pk:
