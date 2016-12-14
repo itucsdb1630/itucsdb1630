@@ -77,3 +77,9 @@ def contact_admin():
             'Phone', 'Status', 'Sent Time','Comment' ,'Delete'
         ]
     )
+
+
+@contactus.teardown_request
+def close_connection(error=None):
+    from lightmdb import close_db
+    close_db()

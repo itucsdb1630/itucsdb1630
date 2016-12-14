@@ -106,6 +106,7 @@ def get_db(app):
 def close_db():
     if hasattr(g, 'database'):
         g.database.close()
+        del g.database
 
 
 def _connect_db(app):
