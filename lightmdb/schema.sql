@@ -50,7 +50,7 @@ INSERT INTO user_messages (
 (2 ,3 , 'Sshhh! It is between us.' ),
   (1,3,'Yo yo...');
 
-DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS movies CASCADE;
 CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
   title varchar(200) UNIQUE NOT NULL,
