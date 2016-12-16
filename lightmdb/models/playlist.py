@@ -65,6 +65,9 @@ class Playlist(object):
             "SELECT * FROM {table}".format(table=cls.TABLE_NAME)
         )
         playlists = db.fetch_execution(cursor)
+        plists = []
+        for entry in playlists:
+            plists.append(Playlist(**entry))
         return playlists
 
     @classmethod
