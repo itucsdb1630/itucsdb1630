@@ -61,6 +61,7 @@ class Playlist(object):
     def get_all(cls, pk=None, name=None):
         db = get_database()
         cursor = db.cursor
+        print("i hier u liek mudkipz", file=sys.stderr)
         cursor.execute(
             "SELECT * FROM {table}".format(table=cls.TABLE_NAME)
         )

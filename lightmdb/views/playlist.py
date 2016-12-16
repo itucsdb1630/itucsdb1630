@@ -7,7 +7,6 @@ from lightmdb.models import Playlist
 
 playlist = Blueprint('playlist', __name__)
 
-
 @playlist.route("/new/", methods = ["GET","POST"])
 @login_required
 def add_playlist():
@@ -22,7 +21,7 @@ def add_playlist():
     return render_template('playlist/add.html',form=form)
 
 
-@playlist.route("/<pk>",methods = ["GET","POST"])
+@playlist.route("/<pk>/",methods = ["GET","POST"])
 def playlists(pk):
     _playlist = Playlist.get(pk)
     if not _playlist:
