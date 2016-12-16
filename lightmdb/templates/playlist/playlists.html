@@ -20,11 +20,13 @@ Latest Playlists
     </div>
 
     {% for pl in plists %}
+        {% if pl.is_public %}
             <div class="row">
-        <div class="col-md-2">{{pl.name}}</div>
+        <div class="col-md-2"><a href="{{ pl.pk }}/">{{pl.name}}</a></div>
         <div class="col-md-1">{{pl.get_user_name()}}</div>
-        <div class="col-md-2"></div>
+        <div class="col-md-2">{{ pl.count() }}</div>
             </div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

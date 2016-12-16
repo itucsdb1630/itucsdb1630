@@ -118,6 +118,14 @@ class Playlist(object):
         _user= User.get(self.user_id)
         return _user.name
 
+    def count(self):
+        num = 0
+        _movies = self.get_movies()
+        if _movies:
+            for m in _movies:
+                num = num + 1
+        return num
+
     def delete(self):
         if not self.pk:
             raise ValueError("Playlist is not saved yet.")
