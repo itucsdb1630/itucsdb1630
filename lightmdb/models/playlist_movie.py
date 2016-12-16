@@ -1,4 +1,5 @@
 from flask import current_app
+from lightmdb.models import Movie
 
 def get_database():
     from lightmdb import get_db
@@ -28,6 +29,30 @@ class Playlist_Movie():
         if playlist_movie:
             return Playlist_Movie(**playlist_movie[0])
         return None
+
+    @classmethod
+    def get_by_playlist(cls, playlist_id=None):
+        db = get_database()
+        cursor = db.cursor
+        if playlist_id:
+            cursor.execute(
+                "SELECT * FROM {table} WHERE playlist_id=%(playlist_id)s".format(table=cls.TABLE_NAME), {'playlist_id':playlist_id}
+    )
+        else:
+            return None
+        playlist_movies = db.fetch_execution(cursor)
+        if playlist_movies:
+            pl_movies = []
+            for item in playlist_movies:
+                pl_movies.append[Playlist_Movie(**item)]
+            movie_entries = []
+            for item in pl_movies:
+                _movie = Movie.get(item.movie_id)
+                if _movie:
+                    movie_entries.append(_movie)
+            return movie_entries
+        return None
+
 
     def delete(self):
         if not self.pk:

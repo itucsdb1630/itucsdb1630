@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from lightmdb.models import Playlist
 from lightmdb.forms import PlaylistForm
 from flask import Blueprint, render_template, current_app, request
-from lightmdb.models import Playlist
+from lightmdb.models import Playlist, Playlist_Movie
 
 playlist = Blueprint('playlist', __name__)
 
@@ -27,7 +27,7 @@ def playlists(pk):
     if not _playlist:
         abort(404,{'message':'Playlist not found.'})
     if _playlist:
-        _movies = _playlist.get_movies()
+        _movies = Playlist_Movie.get_by_playlist(_playlist.pk)
     return render_template('playlist/playlist.html', movies = _movies, playlist = _playlist)
 
 
