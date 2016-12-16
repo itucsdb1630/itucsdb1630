@@ -62,7 +62,7 @@ CREATE TABLE movies(
   rewatchability FLOAT
 );
 
-DROP TABLE IF EXISTS playlists;
+DROP TABLE IF EXISTS playlists CASCADE;
 CREATE TABLE playlists(
   id SERIAL PRIMARY KEY,
   name varchar(200) UNIQUE NOT NULL,
