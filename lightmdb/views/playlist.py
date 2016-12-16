@@ -33,7 +33,7 @@ def playlists(pk):
 
 
 @playlist.route("/")
-def playlists():
+def playlists_index():
     _playlists = Playlist.get_all()
     return render_template('playlist/playlists.html',plists=_playlists)
 

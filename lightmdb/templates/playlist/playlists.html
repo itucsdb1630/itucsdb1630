@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {%  block title %}Playlists{%  endblock %}
 {% block content %}
-    <!-- Bootstrap core CSS -->
 
     <style media="screen">
       .half {
@@ -22,7 +21,7 @@ Latest Playlists
 
     {% for pl in plists %}
         <div class="col-md-2">{{pl.name}}</div>
-        <div class="col-md-1">{{pl.user_name()}}</div>
+        <div class="col-md-1">{{pl.get_user_name()}}</div>
         <div class="col-md-2">{{pl.count()}}</div>
     {% endfor %}
 

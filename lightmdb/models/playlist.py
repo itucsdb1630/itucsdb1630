@@ -111,6 +111,9 @@ class Playlist(object):
             movies.append(Movie.get(item))
         return movies
 
+    def get_user_name(self):
+        _user= User.get(self.user_id)
+        return _user.name
 
     def delete(self):
         if not self.pk:
