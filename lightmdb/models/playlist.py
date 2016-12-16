@@ -68,7 +68,7 @@ class Playlist(object):
         plists = []
         for entry in playlists:
             plists.append(Playlist(**entry))
-        return playlists
+        return plists
 
     @classmethod
     def append(self, title):
