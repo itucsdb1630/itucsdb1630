@@ -2,6 +2,8 @@ from flask import Blueprint, abort, redirect, url_for, render_template, current_
 from flask_login import login_required, current_user
 from lightmdb.models import Playlist
 from lightmdb.forms import PlaylistForm
+from flask import Blueprint, render_template, current_app, request
+from lightmdb.models import Playlist
 
 playlist = Blueprint('playlist', __name__)
 
@@ -32,7 +34,8 @@ def playlists(pk):
 
 @playlist.route("/")
 def playlists():
-    return render_template('playlist/playlist.html')
+    _playlists = Playlist.get_all()
+    return render_template('playlist/playlists.html',plists=_playlists)
 
 
 @playlist.teardown_request

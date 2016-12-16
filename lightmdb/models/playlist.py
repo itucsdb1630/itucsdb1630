@@ -56,7 +56,17 @@ class Playlist(object):
         if playlist:
             return Playlist(**playlist[0])
         return None
-    
+
+    @classmethod
+    def get_all(cls, pk=None, name=None):
+        db = get_database()
+        cursor = db.cursor
+        cursor.execute(
+            "SELECT * FROM {table}".format(table=cls.TABLE_NAME)
+        )
+        playlists = db.fetch_execution(cursor)
+        return playlists
+
     @classmethod
     def append(self, title):
         _movie = Movie.get(title)
