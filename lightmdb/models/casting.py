@@ -24,8 +24,8 @@ class Casting(object):
         data = OrderedDict([
             ('pk', self.pk),
             ('movie_pk', self.movie_pk),
-            ('celebrity_pk',self.celebrity_pk)
-            ('role',self.role)
+            ('celebrity_pk', self.celebrity_pk),
+            ('role', self.role)
         ])
         return data
 
