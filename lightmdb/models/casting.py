@@ -81,7 +81,7 @@ class Casting(object):
         if self.pk:
             casting = self.get(pk=self.pk)
         else:
-            casting = self.get(title=self.title)
+            casting = self.get(title=self.name)
         if casting:
             # update old casting
             old_data = casting.values()
@@ -110,4 +110,4 @@ class Casting(object):
                 "(%(movie_pk)s, %(celebrity_pk)s, %(role)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
         db.commit()
-        return self.get(title=self.title)
+        return self.get(title=self.name)
