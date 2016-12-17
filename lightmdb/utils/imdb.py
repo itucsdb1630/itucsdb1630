@@ -42,9 +42,12 @@ def save_movie(pk):
     video = search_video(imdb_movie.title, count=1)
     if not len(video):
         video = [None]
-    movie_plot = ""
-    for plot in imdb_movie.plots:
-        movie_plot += "<p>" + plot + "</p>"
+    if not len(imdb_movie.plots):
+        movie_plot = "<p></p>"
+    else:
+        movie_plot = "<p>" + imdb_movie.plots[0] + "</p>"
+        if len(imdb_movie) > 1:
+            movie_plot += "<p>" + imdb_movie.plots[1] + "</p>"
     movie = Movie(
         title=imdb_movie.title,
         synopsis=imdb_movie.plot_outline,
