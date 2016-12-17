@@ -17,6 +17,7 @@ def movie(pk):
             if not pk:
                 abort(404, {'message': "Movie cannot be saved."})
             return redirect(url_for('.movie', pk=pk))
+        return redirect(url_for('.movie', pk=_movie.pk))
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
