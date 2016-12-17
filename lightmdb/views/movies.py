@@ -2,12 +2,21 @@ from flask import Blueprint, flash, render_template, current_app, request, abort
 from flask_login import login_required
 from lightmdb.forms import MovieForm, UpdateMovieForm
 from lightmdb.models import Movie
+from lightmdb.utils import search_movie, get_movie, save_movie
+
 
 movies = Blueprint('movies', __name__)
 
 
 @movies.route("/<pk>")
 def movie(pk):
+    if 'tt' in pk:
+        _movie = Movie.get(imdb_pk=pk)
+        if not _movie:
+            pk = save_movie(pk)
+            if not pk:
+                abort(404, {'message': "Movie cannot be saved."})
+            return redirect(url_for('.movie', pk=pk))
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
@@ -60,6 +69,18 @@ def add_movie():
         _movie = _movie.save()
         return redirect(url_for('.movie', pk=_movie.pk))
     return render_template('movie/add.html', form=form)
+
+
+@movies.route("/search/")
+def search():
+    query = request.args.get('q')
+    provider_result = search_movie(query)[:5]
+    movies = []
+    for movie in provider_result:
+        movies.append(get_movie(movie['imdb_id']))
+    print(movies)
+    data = {'movies': movies}
+    return render_template('movie/search.html', **data)
 
 
 @movies.teardown_request

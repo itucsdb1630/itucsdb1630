@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if current_user.is_authenticated %}
-      <h1>Hello, {{ current_user }}
+      <h1>Hello, {{ current_user }}</h1>
     {% else %}
       <h1>Hello, Anonymouse!</h1>
     {% endif %}

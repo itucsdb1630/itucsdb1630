@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Movie Search{% endblock %}
+{% block content %}
+<div class="row">
+  {% for movie in movies %}
+    <div class="col-md-12 movie">
+      <div class="col-md-3">
+        <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
+          <img src="{{ movie.poster_url }}" alt="Movie Poster" width="256px">
+        </a>
+      </div>
+      <div class="col-md-9">
+        <div class="row movie-details">
+          <div class="col-md-12">
+            {{ movie.title }} ({{ movie.year }})
+          </div>
+          <div class="col-md-12">
+            IMDB: {{ movie.rating }} / {{ (movie.runtime / 60)|int }} minutes
+          </div>
+          <div class="col-md-12">
+            <i>{{ movie.tagline }}</i><br/>
+            {{ movie.plot_outline }}
+          </div>
+          <div class="col-md-12">
+            {% for tag in movie.genres %}
+            <div class="tag">{{ tag }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-md-12">
+            <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
+              <button class="btn btn-primary">
+                <i class="fa fa-film"></i> View Details
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+var q = "{{ request.args.get('q') }}";
+$(window).on('load', function() {
+  if (q && q != "None") {
+    $('#search-input').val(q);
+  }
+})
+</script>
+{% endblock %}

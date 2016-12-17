@@ -5,4 +5,6 @@ Flask-WTF
 flask-login
 blinker
 Flask-Gravatar
+beautifulsoup4
+imdbpie==4.2.0
 raven

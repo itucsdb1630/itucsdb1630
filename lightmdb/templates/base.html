@@ -35,9 +35,9 @@
                     <li><a href="{{ url_for('messenger.main') }}">Messenger</a></li>
                 {% endif %}
             </ul>
-            <form class="navbar-form navbar-left" role="search">
+            <form action="{{ url_for('movies.search') }}" method="GET" class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" name="q" class="form-control" id="search-input" placeholder="Search">
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
@@ -99,6 +99,7 @@
 <!-- Le Scripts -->
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% block extra_css %}{% endblock %}
 {% block extra_js %}{% endblock %}
 </body>

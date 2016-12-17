@@ -132,6 +132,21 @@ li.user-header {
 .profile-container {
   padding-top: 20em;
 }
+.tag {
+  display: inline-block;
+  border-radius: 15%;
+  padding: 4px;
+  background-color: #121213;
+  color: #EEEEEE;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.movie {
+  padding: 5px;
+}
+.movie-details {
+  padding-top: 24px;
+}
 
 @media (max-width: 767px) {
   /* Mobile view */
