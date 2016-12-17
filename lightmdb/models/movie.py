@@ -12,7 +12,8 @@ class Movie(object):
     TABLE_NAME = 'movies'
 
     def __init__(self, pk=None, title=None, synopsis=None, plot=None, year=None, runtime=None, votes=0, score=0,
-                 rewatchability_count=0, rewatchability=0, cover=None, trailer=None, imdb_pk=None, imdb_score=0):
+                 rewatchability_count=0, rewatchability=0, cover=None, trailer=None, certification=None,
+                 imdb_pk=None, imdb_score=0):
         self.pk = pk
         self.title = title
         self.synopsis = synopsis
@@ -25,6 +26,7 @@ class Movie(object):
         self.rewatchability = rewatchability
         self.cover = cover
         self.trailer = trailer
+        self.certification = certification
         self.imdb_pk = imdb_pk
         self.imdb_score = imdb_score
 
@@ -45,6 +47,7 @@ class Movie(object):
             ('rewatchability', self.rewatchability),
             ('cover', self.cover),
             ('trailer', self.trailer),
+            ('certification', self.certification),
             ('imdb_pk', self.imdb_pk),
             ('imdb_score', self.imdb_score),
         ])
@@ -138,10 +141,10 @@ class Movie(object):
         del data['pk']
         query = "INSERT INTO {table} " \
                 "(title, synopsis, plot, year, runtime, votes, score, rewatchability_count, rewatchability, " \
-                "cover, trailer, imdb_pk, imdb_score) VALUES" \
+                "cover, trailer, certification, imdb_pk, imdb_score) VALUES" \
                 "(%(title)s, %(synopsis)s, %(plot)s, %(year)s, %(runtime)s, %(votes)s, %(score)s, " \
-                "%(rewatchability_count)s, %(rewatchability)s, %(cover)s, %(trailer)s, %(imdb_pk)s, " \
-                "%(imdb_score)s)".format(table=self.TABLE_NAME)
+                "%(rewatchability_count)s, %(rewatchability)s, %(cover)s, %(trailer)s, %(certification)s, " \
+                "%(imdb_pk)s, %(imdb_score)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
         db.commit()
         return self.get(title=self.title)

@@ -66,6 +66,7 @@ CREATE TABLE movies(
   rewatchability FLOAT,
   cover TEXT,
   trailer TEXT,
+  certification varchar(20),
   imdb_pk varchar(20),
   imdb_score FLOAT
 );

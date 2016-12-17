@@ -147,6 +147,60 @@ li.user-header {
 .movie-details {
   padding-top: 24px;
 }
+.movie-ratings {
+  display: inline-block;
+}
+.imdb-rating {
+  width: 35px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.imdb-rating > i {
+  font-size: 31px;
+}
+.movie-infos {
+  display: inline-block;
+}
+.movie-infos > span {
+  padding-right: 20px;
+}
+.movie-infos > span > a {
+  color: #000000;
+}
+.movie-infos > span > a:hover {
+  text-decoration: none;
+  color: #18bc9c;
+}
+/* Rating Star */
+.rating {
+  border: none;
+  float: left;
+}
+.rating > input { display: none; }
+.rating > label:before {
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+.rating > .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.rating > label {
+  color: #ddd;
+ float: right;
+}
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+/* /Rating Star */
 
 @media (max-width: 767px) {
   /* Mobile view */

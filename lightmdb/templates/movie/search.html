@@ -15,7 +15,10 @@
             {{ movie.title }} ({{ movie.year }})
           </div>
           <div class="col-md-12">
-            IMDB: {{ movie.rating }} / {{ (movie.runtime / 60)|int }} minutes
+            IMDB: {{ movie.rating }} /
+            {% if movie.runtime %}
+            {{ (movie.runtime / 60)|int }} minutes
+            {% endif %}
           </div>
           <div class="col-md-12">
             <i>{{ movie.tagline }}</i><br/>
