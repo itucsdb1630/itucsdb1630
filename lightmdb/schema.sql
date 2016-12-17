@@ -34,7 +34,7 @@ ALTER TABLE ONLY user_followers
 ALTER TABLE ONLY user_followers
     ADD CONSTRAINT user_followers_fk_following_id FOREIGN KEY (following_id) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
 
---INSERT INTO user_followers (follower_id, following_id) VALUES (2, 3), (3, 2);
+INSERT INTO user_followers (follower_id, following_id) VALUES (2, 3), (3, 2);
 --@TODO handle it in init code, as serial id fails when using id to add users.
 
 DROP TABLE IF EXISTS user_messages CASCADE;

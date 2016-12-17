@@ -15,7 +15,7 @@ def logout():
 @messenger.route("/")
 @login_required
 def main():
-    user_list = User.filter()
+    user_list = current_user.friendlist
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=current_user.pk)
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=current_user)
 
@@ -24,7 +24,7 @@ def main():
 @login_required
 def get_messages(pk):
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=pk)
-    user_list = User.filter()
+    user_list = current_user.friendlist
     receiver = User.get(pk=pk)
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver)
 
@@ -36,7 +36,7 @@ def send_message(pk):
     message = Messenger(sender_pk=current_user.pk, receiver_pk=pk, message=message)
     message.save()
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=pk)
-    user_list = User.filter()
+    user_list = current_user.friendlist
     receiver = User.get(pk=pk)
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver)
 
@@ -46,7 +46,7 @@ def send_message(pk):
 def delete_message(message_pk, pk):
     Messenger.__delete__(message_pk)
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=pk)
-    user_list = User.filter()
+    user_list = current_user.friendlist
     receiver = User.get(pk=pk)
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver)
 
