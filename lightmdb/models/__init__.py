@@ -6,6 +6,8 @@ from .messenger import Messenger
 from .movie import Movie
 from .playlist import Playlist
 from .playlist_movie import Playlist_Movie
+from .celebrity import  Celebrity
+from .casting import Casting
 
 __all__ = [
     'Database',
@@ -17,5 +19,7 @@ __all__ = [
     'Playlist',
     'Playlist_Movie',
     'Messenger'
+    'Messenger',
+    'Celebrity',
 ]
 

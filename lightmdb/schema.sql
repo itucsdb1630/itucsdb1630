@@ -80,6 +80,36 @@ CREATE TABLE playlists(
   user_id INT --this is the user who created the playlist
 );
 
+DROP TABLE IF EXISTS celebrities CASCADE ;
+CREATE TABLE celebrities(
+  id SERIAL PRIMARY KEY,
+  name varchar(200) NOT NULL,
+  birthday date,
+  imdb_pk varchar (20)
+);
+
+DROP TABLE IF EXISTS casting CASCADE;
+CREATE TABLE casting(
+  id SERIAL PRIMARY KEY,
+  movie_pk int,
+  celebrity_pk int
+);
+
+DROP TABLE IF EXISTS directors CASCADE;
+CREATE TABLE directors(
+  id SERIAL PRIMARY KEY,
+  movie_pk int,
+  celebrity_pk int
+);
+
+CREATE INDEX cast_celebrity_index ON casting USING btree (celebrity_pk);
+CREATE INDEX directors_celebrity_index ON directors USING btree (celebrity_pk);
+ALTER TABLE ONLY directors
+    ADD CONSTRAINT directors_celebrity_id FOREIGN KEY (celebrity_pk) REFERENCES celebrities(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY casting
+    ADD CONSTRAINT cast_celebrities_id FOREIGN KEY (celebrity_pk) REFERENCES celebrities(id) DEFERRABLE INITIALLY DEFERRED;
+
+
 DROP TABLE IF EXISTS playlist_movies CASCADE;
 CREATE TABLE playlist_movies(
   id SERIAL PRIMARY KEY,
