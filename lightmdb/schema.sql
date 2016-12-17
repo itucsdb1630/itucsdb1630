@@ -57,11 +57,18 @@ CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
   title varchar(200) UNIQUE NOT NULL,
   synopsis varchar(254) NOT NULL,
+  plot TEXT,
   year INT,
+  runtime INT,
   votes INT,
   score FLOAT,
   rewatchability_count INT,
-  rewatchability FLOAT
+  rewatchability FLOAT,
+  cover TEXT,
+  trailer TEXT,
+  certification varchar(20),
+  imdb_pk varchar(20),
+  imdb_score FLOAT
 );
 
 

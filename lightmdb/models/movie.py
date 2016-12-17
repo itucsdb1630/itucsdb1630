@@ -11,16 +11,24 @@ class Movie(object):
     """Movie Model."""
     TABLE_NAME = 'movies'
 
-    def __init__(self, pk=None, title=None, synopsis=None, year=None, votes=0, score=0,
-                 rewatchability_count=0, rewatchability=0):
+    def __init__(self, pk=None, title=None, synopsis=None, plot=None, year=None, runtime=None, votes=0, score=0,
+                 rewatchability_count=0, rewatchability=0, cover=None, trailer=None, certification=None,
+                 imdb_pk=None, imdb_score=0):
         self.pk = pk
         self.title = title
         self.synopsis = synopsis
+        self.plot = plot
         self.year = year
+        self.runtime = runtime
         self.votes = votes
         self.score = score
         self.rewatchability_count = rewatchability_count
         self.rewatchability = rewatchability
+        self.cover = cover
+        self.trailer = trailer
+        self.certification = certification
+        self.imdb_pk = imdb_pk
+        self.imdb_score = imdb_score
 
     def get_id(self):
         return str(self.pk)
@@ -30,16 +38,23 @@ class Movie(object):
             ('pk', self.pk),
             ('title', self.title),
             ('synopsis', self.synopsis),
+            ('plot', self.plot),
             ('year', self.year),
+            ('runtime', self.runtime),
             ('votes', self.votes),
             ('score', self.score),
             ('rewatchability_count', self.rewatchability_count),
             ('rewatchability', self.rewatchability),
+            ('cover', self.cover),
+            ('trailer', self.trailer),
+            ('certification', self.certification),
+            ('imdb_pk', self.imdb_pk),
+            ('imdb_score', self.imdb_score),
         ])
         return data
 
     @classmethod
-    def get(cls, pk=None, title=None):
+    def get(cls, pk=None, title=None, imdb_pk=None):
         """Get movie by identifier.
 
         Usage: Movie.get(title)
@@ -56,6 +71,11 @@ class Movie(object):
             cursor.execute(
                 "SELECT * FROM {table} WHERE title=%(title)s".format(table=cls.TABLE_NAME),
                 {'title': title}
+            )
+        elif imdb_pk:
+            cursor.execute(
+                "SELECT * FROM {table} WHERE imdb_pk=%(imdb_pk)s".format(table=cls.TABLE_NAME),
+                {'imdb_pk': imdb_pk}
             )
         else:
             return None
@@ -120,10 +140,11 @@ class Movie(object):
         # new movie
         del data['pk']
         query = "INSERT INTO {table} " \
-                "(title, synopsis, year, votes, score, rewatchability_count, rewatchability) " \
-                "VALUES" \
-                "(%(title)s, %(synopsis)s, %(year)s, %(votes)s, %(score)s, " \
-                "%(rewatchability_count)s, %(rewatchability)s)".format(table=self.TABLE_NAME)
+                "(title, synopsis, plot, year, runtime, votes, score, rewatchability_count, rewatchability, " \
+                "cover, trailer, certification, imdb_pk, imdb_score) VALUES" \
+                "(%(title)s, %(synopsis)s, %(plot)s, %(year)s, %(runtime)s, %(votes)s, %(score)s, " \
+                "%(rewatchability_count)s, %(rewatchability)s, %(cover)s, %(trailer)s, %(certification)s, " \
+                "%(imdb_pk)s, %(imdb_score)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
         db.commit()
         return self.get(title=self.title)

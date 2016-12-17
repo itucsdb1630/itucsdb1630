@@ -1,7 +1,60 @@
 {% extends "base.html" %}
 {% block title %}{{ movie.title }} - {{ movie.year }}{% endblock %}
 {% block content %}
-    <div>
+  <div class="row">
+    <div class="col-md-3">
+      <img src="{{ movie.cover }}" alt="{{ movie.title }}">
+      <div class="row text-center">
+        <div class="col-md-12 movie-ratings">
+          <!-- Buttons: Watched, rating and etc -->
+          <div class="imdb-rating">
+            <i class="fa fa-imdb"></i> <span>{{ movie.imdb_score }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="movie-title"><h1>{{ movie.title }}</h1></div>
+        </div>
+        <div class="col-md-12">
+          <div class="movie-synopsis"><i>{{ movie.synopsis }}</i></div>
+        </div>
+        <div class="col-md-12">
+          <div class="movie-rating">
+            <fieldset class="rating">
+              <input type="radio" id="star3" name="rating" value="3" />
+              <label class = "full" for="star3" title="Awesome"></label>
+              <input type="radio" id="star2" name="rating" value="2" />
+              <label class = "full" for="star2" title="Good"></label>
+              <input type="radio" id="star1" name="rating" value="1" />
+              <label class = "full" for="star1" title="Sucks"></label>
+            </fieldset>
+          </div>
+        </div>
+        <div class="col-md-12 movie-infos">
+          <span><i class="fa fa-certificate"></i> {{ movie.certification }}</span>
+          {% if movie.runtime %}
+          <span><i class="fa fa-film"></i> {{ (movie.runtime / 60)|int }} minutes</span>
+          {% endif %}
+          {% if movie.trailer %}
+          <span>
+            <a class="fancybox fancybox.iframe" href="{{ movie.trailer }}">
+              <i class="fa fa-youtube-play"></i> Watch Trailer
+            </a>
+          </span>
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          {{ movie.plot|safe }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+
+    {# <div>
         <h1>{{ movie.title }} - {{ movie.year }}</h1>
         <div>
             <p><a class="btn btn-sm btn-warning" href="{{ url_for('movies.update_movie', pk=movie.pk) }}" role="button">Update</a></p>
@@ -47,5 +100,26 @@
                 <td>{{ movie.synopsis }}</td>
             </tr>
         </table>
-    </div>
+    </div>#}
+{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fancybox.css') }}"/>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/jquery.fancybox.js') }}"></script>
+<script>
+$(document).ready(function() {
+	$(".fancybox").fancybox({
+		maxWidth	: 800,
+		maxHeight	: 600,
+		fitToView	: true,
+		width		: '70%',
+		height		: '70%',
+		autoSize	: true,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+	});
+});
+</script>
 {% endblock %}
