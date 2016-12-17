@@ -28,8 +28,10 @@
                 <li><a href="#">Categories</a></li>
                 <li><a href="{{ url_for('movies.add_movie') }}">Add a Movie</a></li>
                 <li><a href="{{ url_for('toplist.toplists') }}">Toplists</a></li>
+                <li><a href="{{ url_for('playlist.add_playlist') }}">Add a Playlist</a></li>
                 <li><a href="{{ url_for('contactus.contact') }}">Contact</a></li>
                 <li><a href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('playlist.playlists_index') }}">Playlists</a></li>
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>
                     <li><a href="{{ url_for('messenger.main') }}">Messenger</a></li>

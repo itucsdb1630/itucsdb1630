@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{%  block title %}Playlists{%  endblock %}
+{% block content %}
+
+    <style media="screen">
+      .half {
+        width: 50%;
+        float: left;
+        min-height: 300px;
+      }
+    </style>
+<div style="padding-bottom:10px">
+Latest Playlists
+    <img src="../../static/images/camera.svg" height="30px" />
+</div>
+    <div class="row">
+        <div class="col-md-2">Playlist</div>
+        <div class="col-md-1">Author</div>
+        <div class="col-md-2"># of Movies</div>
+    </div>
+
+    {% for pl in plists %}
+        {% if pl.is_public %}
+            <div class="row">
+        <div class="col-md-2"><a href="{{ pl.pk }}/">{{pl.name}}</a></div>
+        <div class="col-md-1">{{pl.get_user_name()}}</div>
+        <div class="col-md-2">{{ pl.count() }}</div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

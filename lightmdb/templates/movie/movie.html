@@ -57,8 +57,8 @@
     {# <div>
         <h1>{{ movie.title }} - {{ movie.year }}</h1>
         <div>
-            <p><a class="btn btn-sm btn-warning" href="{{ url_for('movies.update_movie', pk=movie.pk) }}" role="button">Update</a></p>
-            <p><a class="btn btn-sm btn-danger" href="{{ url_for('movies.delete_movie',pk=movie.pk)}}" role="button">Delete</a></p>
+            <a class="btn btn-sm btn-warning" href="{{ url_for('movies.update_movie', pk=movie.pk) }}" role="button">Update</a>
+            <a class="btn btn-sm btn-danger" href="{{ url_for('movies.delete_movie',pk=movie.pk)}}" role="button">Delete</a>
         </div>
         <table>
             <tr>
@@ -76,27 +76,17 @@
             <tr>
                 <td>Rating</td>
                 <td>
-                    {% if movie.score %}
-                        {{ movie.score }}
-                    {% else %}
-                        No ratings yet!
-                    {% endif %}
+                    {% if movie.score %}{{ movie.score }}
+                    {% else %}No ratings yet!{% endif %}
                 </td>
             </tr>
             <tr>
-                <td>Rewatchability
-                <td>
-                <td>
-                    {% if movie.rewatchability %}
-                        {{ movie.rewatchability }}
-                    {% else %}
-                        No ratings yet!
-                    {% endif %}
-                </td>
+                <td>Rewatchability<td>
+                <td>{% if movie.rewatchability %}{{ movie.rewatchability }}
+                    {% else %}No ratings yet!{% endif %}</td>
             </tr>
             <tr>
-                <td>Synopsis
-                <td>
+                <td>Synopsis<td>
                 <td>{{ movie.synopsis }}</td>
             </tr>
         </table>

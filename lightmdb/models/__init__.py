@@ -4,6 +4,8 @@ from .contactus import ContactMessage
 from .contactComments import ContactComment
 from .messenger import Messenger
 from .movie import Movie
+from .playlist import Playlist
+from .playlist_movie import Playlist_Movie
 
 __all__ = [
     'Database',
@@ -12,6 +14,8 @@ __all__ = [
     'ContactMessage',
     'ContactComment',
     'Movie',
-    'Messenger',
+    'Playlist',
+    'Playlist_Movie',
+    'Messenger'
 ]
 
