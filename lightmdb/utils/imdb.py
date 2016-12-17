@@ -64,7 +64,7 @@ def save_movie(pk):
     for new_celebrity in imdb_movie.credits:
         celebrity = Celebrity(imdb_pk=new_celebrity.imdb_id, name=new_celebrity.name)
         celebrity = celebrity.save()
-        #new_celebrity.roles can be more than one value it should be fixed
+        # new_celebrity.roles can be more than one value it should be fixed
         casting = Casting(movie_pk=imdb_movie.imdb_id, celebrity_pk=celebrity.pk)
         casting.save()
     return movie.pk

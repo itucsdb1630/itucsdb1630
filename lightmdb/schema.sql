@@ -72,6 +72,12 @@ CREATE TABLE movies(
   imdb_score FLOAT
 );
 
+-- This insert is for just test purposes
+INSERT INTO movies (
+  title, synopsis
+) VALUES ('TEST_MOVIE_1', 'TEST_1'),
+('TEST_MOVIE_2', 'TEST_2');
+
 DROP TABLE IF EXISTS playlists CASCADE;
 CREATE TABLE playlists(
   id SERIAL PRIMARY KEY,
@@ -118,6 +124,27 @@ CREATE TABLE playlist_movies(
   ordering INT --order is a reserved keyword
 );
 
+DROP TABLE IF EXISTS watched_movies CASCADE;
+CREATE TABLE watched_movies (
+  id SERIAL PRIMARY KEY ,
+  user_pk INT,
+  movie_pk INT,
+  added_at timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
+-- This insert is for just test purposes
+INSERT INTO watched_movies (
+  user_pk, movie_pk
+) VALUES (1, 1),
+(1,2),
+(2,1),
+(3,2);
+
+
+ALTER TABLE ONLY watched_movies
+    ADD CONSTRAINT watched_movies_fk_user_pk FOREIGN KEY (user_pk) REFERENCES users(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY watched_movies
+    ADD CONSTRAINT watched_movies_fk_movie_pk FOREIGN KEY (movie_pk) REFERENCES movies(id) DEFERRABLE INITIALLY DEFERRED;
 
 CREATE INDEX playlist_movies_movies_index ON playlist_movies USING btree (movie_id);
 CREATE INDEX playlist_movies_playlists_index ON playlist_movies USING btree (playlist_id);

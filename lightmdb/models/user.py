@@ -70,6 +70,18 @@ class User(UserMixin):
             return result[0]
         return 0
 
+    def get_watched_movies(self):
+        db = get_database()
+        cursor = db.cursor
+        cursor.execute("SELECT * FROM {table} WHERE id in (SELECT movie_pk from watched_movies where id = %(pk)s)".format(
+            table="movies"),
+            {'pk': self.pk}
+        )
+        result = cursor.fetchone()
+        if result:
+            return result
+        return None
+
     def get_id(self):
         return str(self.pk)
 
