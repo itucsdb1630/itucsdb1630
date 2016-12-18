@@ -2,7 +2,7 @@
 {% block title %}{{ movie.title }} - {{ movie.year }}{% endblock %}
 {% block content %}
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
       <img src="{{ movie.cover }}" alt="{{ movie.title }}">
       <div class="row text-center">
         <div class="col-md-12 movie-ratings">
@@ -12,6 +12,59 @@
           </div>
         </div>
       </div>
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h4 class="panel-title  text-center">{{ movie.title }} Tags </h4>
+            </div>
+            <div class="panel-body" style="border: 1px solid dimgrey;border-radius: 5px;">
+            {% if movie_tags %}
+                {% for id ,tag_id ,tag_name in movie_tags %}
+                    <div  class="btn btn-primary" style="min-width: 30% ;padding: 5px;margin: 5px">
+                        <p class="text-primary" style="color:white">{{ tag_name }}
+                            <button class="btn btn-xs btn-danger" name="deltag" value="{{ id }}"><i class="fa fa-remove"></i></button>
+                        </p>
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <p class="text-danger">There is not any tag</p>
+            {% endif %}
+
+            </div>
+            <div class="panel-footer">
+                <button id="addbutton" type="button" onclick="addTag()"><i class="fa fa-upload"></i>Tag Add</button>
+                <div id="addlist" class="form-group hidden">
+                    <input class="form-group" name="newtag" placeholder="Enter a new tag to add"/>
+                    <label>
+                        <select class="form-control " name="tag">
+                            <option value="0">Chose One</option>
+                            {% if movie_tags %}
+                                {% for tag_id ,tag_name in tags %}
+                                    <option value="{{tag_id}}">{{tag_name}}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        <br/>
+                    </label>
+                </div>
+                {% if  tagedit %}
+                <table class="table table-bordered">
+                    {% if movie_tags %}
+                        {% for tag_id ,tag_name in tags %}
+                        <tr>
+                            <td><input name="{{tag_id}}" value="{{tag_name}}"/></td>
+                            <td><button name="tagedited" value="{{tag_id}}"><i class="fa fa-save"></i></button></td>
+                            <td><button name="tagdelete" value="{{tag_id}}"><i class="fa fa-remove"></i></button></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+                {%endif%}
+            </div>
+        </div>
+        </form>
     </div>
     <div class="col-md-6">
       <div class="row">
