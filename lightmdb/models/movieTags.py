@@ -21,29 +21,29 @@ class MovieTags:
         try:
             db = get_database()
             cursor = db.cursor
-            cursor.execute("SELECT movies.id,movies.title,tags.id,tags.name From movietags join tags on movietags.tagid = tags.id JOIN movies on movietags.movieid = movies.id WHERE id=%s",[self.mt_id])
+            cursor.execute("SELECT movies.id,movies.title,tags.id,tags.name From movietags join tags on movietags.tagid = tags.id JOIN movies on movietags.movieid = movies.id WHERE movietags.id=%s",[self.mt_id])
             tag= cursor.fetchone()
             if tag:
                 return tag
         except:
             return False
 
-    def get_movie_tags_by_tag_id(self):
+    def get_movie_tags_by_movie_id(self):
         try:
             db = get_database()
             cursor = db.cursor
-            cursor.execute("SELECT tags.id,tags.name FROM movietags JOIN tags on movietags.tagid = tags.id WHERE movieid=%s",[self.movie_id])
+            cursor.execute("SELECT movietags.id,tags.id,tags.name FROM movietags JOIN tags on movietags.tagid = tags.id WHERE movieid=%s",[self.movie_id])
             movie_tags= cursor.fetchall()
             if movie_tags:
                 return movie_tags
         except:
             return False
 
-    def get_tag_movies_by_movie_id(self):
+    def get_tag_movies_by_tag_id(self):
         try:
             db = get_database()
             cursor = db.cursor
-            cursor.execute("SELECT * FROM movietags JOIN  movies on movietags.movieid = movies.id WHERE tagid=%s",[self.tag_id])
+            cursor.execute("SELECT movietags.id,movieid ,movies.title FROM movietags JOIN  movies on movietags.movieid = movies.id WHERE tagid=%s",[self.tag_id])
             tag_movies= cursor.fetchall()
             if tag_movies:
                 return tag_movies
@@ -71,6 +71,22 @@ class MovieTags:
                 cursor.execute("INSERT into movietags (movieid,tagid) VALUES (%s,%s)", [self.movie_id,self.tag_id])
             except:
                 return False
+
+    def delete(self):
+        try:
+            db = get_database()
+            cursor = db.cursor
+            cursor.execute("DELETE FROM movietags WHERE id=%s", [self.mt_id])
+        except:
+            return False
+    @staticmethod
+    def delete_by_tag_id(tag_id):
+        try:
+            db = get_database()
+            cursor = db.cursor
+            cursor.execute("DELETE FROM movietags WHERE tagid=%s", [tag_id])
+        except:
+            return False
 
     def update_name(self,tag_id,movie_id):
         try:
