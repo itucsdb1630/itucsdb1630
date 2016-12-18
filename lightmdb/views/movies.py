@@ -8,8 +8,11 @@ from lightmdb.utils import search_movie, get_movie, save_movie
 movies = Blueprint('movies', __name__)
 
 
-@movies.route("/<pk>")
+@movies.route("/<pk>",methods=['POST','GET'])
 def movie(pk):
+    tags=[]
+    tagedit=False
+    movie_tags=[]
     if 'tt' in pk:
         _movie = Movie.get(imdb_pk=pk)
         if not _movie:
@@ -21,7 +24,40 @@ def movie(pk):
     _movie = Movie.get(pk)
     if not _movie:
         abort(404, {'message': 'Movie not found.'})
-    return render_template('movie/movie.html', pk=pk,movie=_movie)
+    else:
+        if request.method == 'POST':
+            if 'saver' in request.form:
+                if 'tag' in request.form and request.form['tag'] !='0':
+                    new_movie_tag=MovieTags(tag_id=request.form['tag'],movie_id=pk)
+                    new_movie_tag.save()
+                if 'tag' in request.form and request.form['tag'] =='0' and 'newtag' in request.form and len(request.form['newtag'])>0 :
+                    new_tag=Tag(tag_name=request.form['newtag'])
+                    new_tag.save()
+                    tag=new_tag.get_tag_by_name()
+                    tag_id=tag[0]
+                    new_movie_tag = MovieTags(tag_id=tag_id, movie_id=pk)
+                    new_movie_tag.save()
+            elif 'deltag' in request.form:
+                movie_tag=MovieTags(movie_tag_id=request.form['deltag'])
+                movie_tag.delete()
+            elif 'edittags' in request.form:
+                tagedit=True
+            elif 'tagedited' in request.form:
+                tag_id=request.form['tagedited']
+                tag = Tag(tag_id=tag_id)
+                tag.update_name(request.form[tag_id])
+            elif 'tagdelete' in request.form:
+                tag_id=request.form['tagdelete']
+                tag = Tag(tag_id=tag_id)
+                MovieTags.delete_by_tag_id(tag_id)
+                tag.delete()
+        tags = Tag.get_tags()
+        movietag = MovieTags(movie_id=pk)
+        movie_tags =movietag.get_movie_tags_by_movie_id()
+
+
+    return render_template('movie/movie.html', pk=pk,movie=_movie,tags=tags,movie_tags=movie_tags,tagedit=tagedit)
+
 
 
 @movies.route("/update/<pk>", methods=["GET","POST"])
