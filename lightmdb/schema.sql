@@ -56,7 +56,7 @@ INSERT INTO user_messages (
 DROP TABLE IF EXISTS movies CASCADE;
 CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
-  title varchar(200) UNIQUE NOT NULL,
+  title varchar(200) NOT NULL,
   synopsis varchar(254) NOT NULL,
   plot TEXT,
   year INT,
