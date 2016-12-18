@@ -75,13 +75,12 @@ class Casting(object):
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
-    def save(self):
+    def save(self, return_obj=True):
         db = get_database()
         data = self.values()
+        casting = None
         if self.pk:
             casting = self.get(pk=self.pk)
-        else:
-            casting = self.get(title=self.name)
         if casting:
             # update old casting
             old_data = casting.values()
@@ -108,6 +107,12 @@ class Casting(object):
         query = "INSERT INTO {table} " \
                 "(movie_pk, celebrity_pk, role) VALUES" \
                 "(%(movie_pk)s, %(celebrity_pk)s, %(role)s)".format(table=self.TABLE_NAME)
-        db.cursor.execute(query, dict(data))
-        db.commit()
-        return self.get(title=self.name)
+        if return_obj:
+            query += " RETURNING id"
+        cursor = db.cursor
+        cursor.execute(query, dict(data))
+        if return_obj:
+            new_row_pk = cursor.fetchone()[0]
+            return self.get(pk=new_row_pk)
+        # db.commit()
+        return True

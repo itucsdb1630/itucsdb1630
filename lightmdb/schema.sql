@@ -91,15 +91,16 @@ CREATE TABLE celebrities(
 DROP TABLE IF EXISTS casting CASCADE;
 CREATE TABLE casting(
   id SERIAL PRIMARY KEY,
-  movie_pk int,
-  celebrity_pk int
+  movie_pk int NOT NULL,
+  celebrity_pk int NOT NULL,
+  role varchar(254)
 );
 
 DROP TABLE IF EXISTS directors CASCADE;
 CREATE TABLE directors(
   id SERIAL PRIMARY KEY,
-  movie_pk int,
-  celebrity_pk int
+  movie_pk int NOT NULL,
+  celebrity_pk int NOT NULL
 );
 
 CREATE INDEX cast_celebrity_index ON casting USING btree (celebrity_pk);

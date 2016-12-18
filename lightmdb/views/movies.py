@@ -75,11 +75,12 @@ def add_movie():
 @movies.route("/search/")
 def search():
     query = request.args.get('q')
+    if not query or not len(query):
+        return redirect(url_for('frontend.index'))
     provider_result = search_movie(query)[:5]
     movies = []
     for movie in provider_result:
         movies.append(get_movie(movie['imdb_id']))
-    print(movies)
     data = {'movies': movies}
     return render_template('movie/search.html', **data)
 

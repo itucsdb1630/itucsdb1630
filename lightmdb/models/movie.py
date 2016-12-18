@@ -148,3 +148,21 @@ class Movie(object):
         db.cursor.execute(query, dict(data))
         db.commit()
         return self.get(title=self.title)
+
+    @classmethod
+    def top_movies(cls, limit=100, **kwargs):
+        db = get_database()
+        cursor = db.cursor
+        filter_data = {}
+        query = "SELECT * FROM " + cls.TABLE_NAME
+        if kwargs:
+            filter_query, filter_data = db.where_builder(kwargs)
+            query += " WHERE " + filter_query
+        query += " ORDER BY score DESC "
+        query += " LIMIT " + str(limit)
+        cursor.execute(query, filter_data)
+        movies = db.fetch_execution(cursor)
+        result = []
+        for movie in movies:
+            result.append(Movie(**movie))
+        return result

@@ -46,7 +46,7 @@ def save_movie(pk):
         movie_plot = "<p></p>"
     else:
         movie_plot = "<p>" + imdb_movie.plots[0] + "</p>"
-        if len(imdb_movie) > 1:
+        if len(imdb_movie.plots) > 1:
             movie_plot += "<p>" + imdb_movie.plots[1] + "</p>"
     movie = Movie(
         title=imdb_movie.title,
@@ -61,10 +61,13 @@ def save_movie(pk):
         imdb_score=imdb_movie.rating
     )
     movie = movie.save()
-    for new_celebrity in imdb_movie.credits:
-        celebrity = Celebrity(imdb_pk=new_celebrity.imdb_id, name=new_celebrity.name)
-        celebrity = celebrity.save()
+    print("movie added")
+    for new_celebrity in imdb_movie.credits[:25]:
+        celebrity = Celebrity.get(imdb_pk=new_celebrity.imdb_id)
+        if not celebrity:
+            celebrity = Celebrity(imdb_pk=new_celebrity.imdb_id, name=new_celebrity.name).save()
+            print("celebrity added")
         #new_celebrity.roles can be more than one value it should be fixed
-        casting = Casting(movie_pk=imdb_movie.imdb_id, celebrity_pk=celebrity.pk)
-        casting.save()
+        casting = Casting(movie_pk=movie.pk, celebrity_pk=celebrity.pk).save()
+        print("casting added")
     return movie.pk

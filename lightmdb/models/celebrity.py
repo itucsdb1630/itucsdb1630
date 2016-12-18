@@ -11,11 +11,11 @@ class Celebrity(object):
     """Celebrity Model."""
     TABLE_NAME = 'celebrities'
 
-    def __init__(self, pk=None, imdb_pk=None, name=None, birthday=None):
+    def __init__(self, pk=None, name=None, birthday=None, imdb_pk=None):
         self.pk = pk
-        self.imdb_pk = imdb_pk
         self.name = name
         self.birthday = birthday
+        self.imdb_pk = imdb_pk
 
     def get_id(self):
         return str(self.pk)
@@ -30,7 +30,7 @@ class Celebrity(object):
         return data
 
     @classmethod
-    def get(cls, pk=None, name=None, imdb_pk=None):
+    def get(cls, pk=None, imdb_pk=None):
         """Get celebrity by identifier.
 
         Usage: Celebrity.get(title)
@@ -42,11 +42,6 @@ class Celebrity(object):
             cursor.execute(
                 "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME),
                 {'id': pk}
-            )
-        elif name:
-            cursor.execute(
-                "SELECT * FROM {table} WHERE name=%(name)s".format(table=cls.TABLE_NAME),
-                {'name': name}
             )
         elif imdb_pk:
             cursor.execute(
@@ -85,13 +80,14 @@ class Celebrity(object):
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
-    def save(self):
+    def save(self, return_obj=True):
         db = get_database()
         data = self.values()
+        celebrity = None
         if self.pk:
             celebrity = self.get(pk=self.pk)
-        else:
-            celebrity = self.get(name=self.name)
+        elif self.imdb_pk:
+            celebrity = self.get(imdb_pk=self.imdb_pk)
         if celebrity:
             # update old celebrity
             old_data = celebrity.values()
@@ -115,9 +111,13 @@ class Celebrity(object):
             return self.get(pk=celebrity.pk)
         # new celebrity
         del data['pk']
-        query = "INSERT INTO {table} " \
-                "(imdb_pk, name, birthday) VALUES" \
-                "(%(imdb_pk)s, %(name)s, %(birthday)s)".format(table=self.TABLE_NAME)
-        db.cursor.execute(query, dict(data))
-        db.commit()
-        return self.get(name=self.name)
+        query = "INSERT INTO {table} (name, birthday, imdb_pk) VALUES (%(name)s, %(birthday)s, %(imdb_pk)s)".format(table=self.TABLE_NAME)
+        if return_obj:
+            query += " RETURNING id"
+        cursor = db.cursor
+        cursor.execute(query, dict(data))
+        # db.commit()
+        if return_obj:
+            new_row_pk = cursor.fetchone()[0]
+            return self.get(pk=new_row_pk)
+        return True

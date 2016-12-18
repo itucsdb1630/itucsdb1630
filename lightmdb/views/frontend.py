@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, current_app, flash, request, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from lightmdb.forms import LoginForm, UserForm
-from lightmdb.models import User
+from lightmdb.models import User, Movie
 
 from datetime import datetime
 
@@ -11,7 +11,11 @@ frontend = Blueprint('frontend', __name__)
 @frontend.route("/")
 def index():
     last_users = User.filter(limit=25, deleted=False)
-    data = {'last_users': last_users}
+    top_movies = Movie.top_movies(limit=10)
+    data = {
+        'last_users': last_users,
+        'top_movies': top_movies
+    }
     return render_template('index.html', **data)
 
 
