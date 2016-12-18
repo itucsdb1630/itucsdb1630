@@ -3,104 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}HomePage{% endblock %} | LightMDb</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/flatly.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Light Movie Database">
 </head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#nav-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+<body id="page-top" class="index">
+<nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-nav-toggle">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="/">LightMDb</a>
+            <a class="navbar-brand page-scroll" href="/">LightMDB</a>
         </div>
 
-        <div class="collapse navbar-collapse" id="nav-navbar-collapse">
-           <ul class="nav navbar-nav">
-                <!-- <li class="active"><a href="#">Current Link <span class="sr-only">(current)</span></a></li> -->
-                <li><a href="#">Categories</a></li>
-                <li><a href="{{ url_for('movies.add_movie') }}">Add a Movie</a></li>
-                <li><a href="{{ url_for('toplist.toplists') }}">Toplists</a></li>
-                <li><a href="{{ url_for('playlist.add_playlist') }}">Add a Playlist</a></li>
-                <li><a href="{{ url_for('contactus.contact') }}">Contact</a></li>
-                <li><a href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>
-                <li><a href="{{ url_for('playlist.playlists_index') }}">Playlists</a></li>
-                {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>
-                    <li><a href="{{ url_for('messenger.main') }}">Messenger</a></li>
-                {% endif %}
+        <div class="collapse navbar-collapse" id="navbar-nav-toggle">
+           <ul class="nav navbar-nav navbar-right">
+             <li class="hidden">
+                <a href="#page-top"></a>
+            </li>
+              <!-- <li class="active"><a href="#">Current Link <span class="sr-only">(current)</span></a></li> -->
+              <!--<li><a class="page-scroll" href="#">Categories</a></li>-->
+              <!--<li><a class="page-scroll" href="{{ url_for('movies.add_movie') }}">Add a Movie</a></li>-->
+              <li><a class="page-scroll" href="{{ url_for('toplist.toplists') }}">Toplists</a></li>
+              <!--<li><a class="page-scroll" href="{{ url_for('playlist.add_playlist') }}">Add a Playlist</a></li>-->
+              <!--<li><a class="page-scroll" href="{{ url_for('contactus.contact') }}">Contact</a></li>-->
+              <!--<li><a class="page-scroll" href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>-->
+              <li><a class="page-scroll" href="{{ url_for('playlist.playlists_index') }}">Playlists</a></li>
+              {% if current_user.is_authenticated %}
+                <!--<li><a class="page-scroll" href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>-->
+                <li><a class="page-scroll" href="{{ url_for('messenger.main') }}">Messenger</a></li>
+              {% endif %}
+              {% if current_user.is_authenticated %}
+              <li class="dropdown user user-menu">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      <img src="{{ current_user.email | gravatar }}" class="user-image" alt="username">
+                      <span class="hidden-xs">{{ current_user }}</span>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <!-- User image -->
+                      <li class="user-header">
+                          <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username">
+                          <p>
+                              <a href="{{ url_for('user.me') }}">
+                                {{ current_user }}
+                              </a>
+                          </p>
+                      </li>
+                      <!-- Menu Body -->
+                      <li class="user-body">
+                          <div class="row">
+                              <div class="col-xs-4 text-center">
+                                  <a href="#">Followers</a>
+                              </div>
+                              <div class="col-xs-4 text-center">
+                                  <a href="#">Lists</a>
+                              </div>
+                              <div class="col-xs-4 text-center">
+                                  <a href="#">Following</a>
+                              </div>
+                          </div>
+                          <!-- /.row -->
+                      </li>
+                      <!-- Menu Footer-->
+                      <li class="user-footer">
+                          <div class="pull-left">
+                              <a href="{{ url_for('user.me') }}" class="btn btn-info btn-flat profile-button">Profile</a>
+                          </div>
+                          <div class="pull-right">
+                              <a href="{{ url_for('frontend.logout') }}" class="btn btn-danger btn-flat logout-button">Sign out</a>
+                          </div>
+                      </li>
+                  </ul>
+              </li>
+              {% else %}
+              <li class="user usermenu">
+                  <a href="{{ url_for('frontend.login') }}?next={{ request.path }}">Sign In</a>
+              </li>
+              <li><a href="{{ url_for('frontend.register') }}">Register</a></li>
+              {% endif %}
             </ul>
             <form action="{{ url_for('movies.search') }}" method="GET" class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" name="q" class="form-control" id="search-input" placeholder="Search">
-                </div>
+              <div class="form-group">
+                <input type="text" name="q" class="form-control" id="search-input" placeholder="Search">
+              </div>
             </form>
-            <ul class="nav navbar-nav navbar-right">
-                {% if current_user.is_authenticated %}
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ current_user.email | gravatar }}" class="user-image" alt="username">
-                            <span class="hidden-xs">{{ current_user }}</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <img src="{{ current_user.email | gravatar }}" class="img-circle" alt="username">
-                                <p>
-                                    <a href="{{ url_for('user.me') }}">
-                                      {{ current_user }}
-                                    </a>
-                                </p>
-                            </li>
-                            <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Lists</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Following</a>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-                            </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="{{ url_for('user.me') }}" class="btn btn-info btn-flat profile-button">Profile</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="{{ url_for('frontend.logout') }}" class="btn btn-danger btn-flat logout-button">Sign out</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li class="user usermenu">
-                        <a href="{{ url_for('frontend.login') }}?next={{ request.path }}">Sign In</a>
-                    </li>
-                    <li><a href="{{ url_for('frontend.register') }}">Register</a></li>
-                {% endif %}
-            </ul>
         </div>
     </div>
 </nav>
-<div class="{% block containerclass %}container{% endblock %}">
-    {% block content %}{% endblock %}
-</div>
+{% block content %}{% endblock %}
+
 <!-- Le Scripts -->
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% block extra_css %}{% endblock %}
 {% block extra_js %}{% endblock %}

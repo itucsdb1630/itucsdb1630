@@ -2,6 +2,8 @@
 {%  block title %}{{ playlist.name }}{%  endblock %}
 
 {% block content %}
+<section id="movie-index" class="grey-section">
+  <div class="container">
 <a class="btn btn-sm btn-danger" href="{{ url_for('movies.delete_movie',pk=movie.pk)}}" role="button">Delete</a>
 
 {{% for item in movies%}}
@@ -10,6 +12,8 @@
 
 </div>
 </div>
+  </div>
+</section>
 {{% endfor %}}
 
 {% endblock %}

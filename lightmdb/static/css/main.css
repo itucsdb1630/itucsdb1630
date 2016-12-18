@@ -8,8 +8,11 @@ body>.navbar {
 .navbar {
     border-width: 0;
 }
-.container {
-    padding-top: 5em;
+header .intro-text {
+  padding-top: 200px;
+}
+.navbar-custom .nav li a {
+  color: #008B8B;
 }
 .navbar-nav > .user-menu .user-image {
     float: left;
@@ -32,7 +35,7 @@ body>.navbar {
   border-bottom-left-radius: 4px;
 }
 li.user-header {
-    background-color: #1a242f;
+    background-color: #222;
 }
 .navbar-nav > .user-menu > .dropdown-menu > li.user-header {
     height: 175px;
@@ -64,6 +67,12 @@ li.user-header {
 .navbar-nav > .user-menu > .dropdown-menu > .user-footer {
     background-color: #1a242f;
     padding: 0px;
+}
+.user-body > .row {
+  font-size: 10px;
+}
+.grey-section {
+  background-color: #EEE;
 }
 .extra-pt5 {
   padding-top: 10em;
@@ -171,6 +180,41 @@ li.user-header {
   text-decoration: none;
   color: #18bc9c;
 }
+.movie-cover {
+  height: 300px;
+  width: 202px;
+}
+.movie-column {
+  padding-right: 2.5px;
+  padding-left: 2.5px;
+}
+.movie-title {
+  height: 40px;
+  color: #000;
+}
+.index-rating-item > span {
+  color: #000;
+}
+#latest-users {
+  background-color: #222;
+}
+.user-name {
+  padding: 1em;
+}
+.index-rating-item {
+  display: inline-block;
+}
+.view-movie-button {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+#search-movies {
+  padding-right: 5em;
+  padding-left: 5em;
+}
+.user-footer > div > a {
+  color: #FFFFFF !important;
+}
 /* Rating Star */
 .rating {
   border: none;
@@ -204,4 +248,8 @@ li.user-header {
 
 @media (max-width: 767px) {
   /* Mobile view */
+  #search-movies {
+    padding-right: 1em;
+    padding-left: 1em;
+  }
 }

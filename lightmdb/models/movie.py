@@ -158,7 +158,7 @@ class Movie(object):
         if kwargs:
             filter_query, filter_data = db.where_builder(kwargs)
             query += " WHERE " + filter_query
-        query += " ORDER BY score DESC "
+        query += " ORDER BY score DESC, imdb_score DESC "
         query += " LIMIT " + str(limit)
         cursor.execute(query, filter_data)
         movies = db.fetch_execution(cursor)

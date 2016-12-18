@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Toplists{% endblock %}
-{% block content %} 
-
+{% block content %}
+<section id="movie-index" class="grey-section">
+  <div class="container">
 <div class="article">
     <h1 class="header">LightMDb Top Rated Movies</h1>
     <div class="byline">Top 5 as rated by LightMDb Users</div>
@@ -37,7 +38,7 @@
           data-sort="rk:desc">
     </span>
   </div>
-          
+
         </div>
       </div>
       <br class="clear">
@@ -62,7 +63,7 @@
   <tr>
     <td class="posterColumn">
 
-   
+
 <a href="#" width="#" height="#"/>
 </a>    </td>
     <td class="titleColumn">
@@ -74,19 +75,19 @@
             <strong>4,6</strong>
     </td>
     <td class="ratingColumn">
-    
+
         <div class="boundary">
             <div class="popover">
 <span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
         </div>
-      
+
     </div>
   </tr>
 
   <tr>
     <td class="posterColumn">
 
-    
+
 <a href="#" width="#" height="#"/>
 </a>    </td>
     <td class="titleColumn">
@@ -98,19 +99,19 @@
             <strong>4,6</strong>
     </td>
     <td class="ratingColumn">
-   
+
         <div class="boundary">
             <div class="popover">
 <span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>            </div>
         </div>
-        
+
     </div>
   </tr>
 
   <tr>
     <td class="posterColumn">
 	<a href="#" width="#" height="#"/>
-	</a>   
+	</a>
     </td>
     <td class="titleColumn">
       3.
@@ -121,19 +122,19 @@
             <strong>4,5</strong>
     </td>
     <td class="ratingColumn">
-  
+
         <div class="boundary">
             <div class="popover">
 <span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>            </div>
         </div>
-       
+
     </div>
   </tr>
 
  <tr>
     <td class="posterColumn">
 
-   
+
 <a href="#" width="#" height="#"/>
 </a>    </td>
     <td class="titleColumn">
@@ -145,19 +146,19 @@
             <strong>4,4</strong>
     </td>
     <td class="ratingColumn">
-    
+
         <div class="boundary">
             <div class="popover">
 <span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
         </div>
-      
+
     </div>
   </tr>
 
  <tr>
     <td class="posterColumn">
 
-	<a href="#" width="#" height="#"/></a>    
+	<a href="#" width="#" height="#"/></a>
    </td>
     <td class="titleColumn">
       5.
@@ -171,9 +172,10 @@
             <div class="boundary">
             <div class="popover">
 <span class="delete">&nbsp;</span><ul><li> 1  2  3  4  5 </ul>  </div>
-        </div>  
-	   
- 	</div>   
-     </tr>
+        </div>
 
+ 	</div>
+     </tr>
+   </div>
+</section>
 {% endblock %}
