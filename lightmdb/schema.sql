@@ -162,3 +162,23 @@ CREATE TABLE contactComments(
 CREATE INDEX contact_id ON contactComments USING btree (pk_contact);
 ALTER TABLE ONLY contactComments
     ADD CONSTRAINT comment_fk_for_contact_id FOREIGN KEY (pk_contact) REFERENCES contactUs(id) DEFERRABLE INITIALLY DEFERRED;
+DROP TABLE IF EXISTS tags CASCADE ;
+CREATE TABLE tags(
+  id SERIAL PRIMARY KEY ,
+  name VARCHAR(255) NOT NULL 
+);
+DROP TABLE IF EXISTS movieTags CASCADE ;
+CREATE TABLE movieTags
+(
+  id SERIAL PRIMARY KEY ,
+  movieId  INT NOT NULL,
+  tagId  INT NOT NULL
+);
+
+CREATE INDEX movie_id ON movieTags USING btree (movieId);
+ALTER TABLE ONLY movieTags
+    ADD CONSTRAINT movie_fk_for_movie_id FOREIGN KEY (movieId) REFERENCES movies(id) DEFERRABLE INITIALLY DEFERRED;
+    
+CREATE INDEX tag_id ON movieTags USING btree (tagId);
+ALTER TABLE ONLY movieTags
+    ADD CONSTRAINT tag_fk_for_tag_id FOREIGN KEY (tagId) REFERENCES tags(id) DEFERRABLE INITIALLY DEFERRED;
