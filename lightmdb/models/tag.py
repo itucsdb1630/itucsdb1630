@@ -48,13 +48,21 @@ class Tag:
             return False
 
     def save(self):
-        if len(self.name)!=0 and len(self.get_tag_by_name())==0:
+        if len(self.name)!=0 and not self.get_tag_by_name():
             try:
                 db = get_database()
                 cursor = db.cursor
                 cursor.execute("INSERT into tags (name) VALUES (%s)", [self.name])
             except:
                 return False
+
+    def delete(self):
+        try:
+            db = get_database()
+            cursor = db.cursor
+            cursor.execute("DELETE FROM tags WHERE id=%s", [self.tag_id])
+        except:
+            return False
 
     def update_name(self,name):
         try:
