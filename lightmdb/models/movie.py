@@ -30,6 +30,16 @@ class Movie(object):
         self.imdb_pk = imdb_pk
         self.imdb_score = imdb_score
 
+    @property
+    def directors(self):
+        from lightmdb.models import Director
+        return Director.filter(movie_pk=self.pk)
+
+    @property
+    def cast(self):
+        from lightmdb.models import Casting
+        return Casting.filter(movie_pk=self.pk)
+
     def get_id(self):
         return str(self.pk)
 

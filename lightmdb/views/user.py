@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, request, render_template, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from lightmdb.models import User, Follower
+from lightmdb.models import User, Follower, StatusMessage
 from lightmdb.forms import ProfileForm
 
 user = Blueprint('user', __name__)
@@ -9,15 +9,20 @@ user = Blueprint('user', __name__)
 @user.route("/<username>")
 def profile(username):
     _user = User.get(username=username)
+    _statusmessages = StatusMessage.filter(user_id=_user.pk)
     if not _user:
         abort(404, {'message': "User not found."})
-    return render_template('user/profile.html', user=_user)
+    data = {
+        'user': _user,
+        'statusmessages': _statusmessages
+    }
+    return render_template('user/profile.html', **data)
 
 
 @user.route("/me")
 @login_required
 def me():
-    return profile(current_user.username)
+    return redirect(url_for('.profile', username=current_user.username))
 
 
 @user.route("/edit", methods=["GET", "POST"])
@@ -91,6 +96,22 @@ def unfollow(pk):
     response = jsonify({'code': 201, 'message': 'Unfollowed'})
     response.status_code = 201
     return response
+
+
+@user.route("/statusmessages/", methods=["POST"])
+@login_required
+def statusmessages():
+    """Add status message."""
+    if not 'message' in request.form:
+        return redirect(url_for('.profile', username=current_user.username))
+    message = request.form['message']
+    if 'movie' in request.form:
+        movie = request.form['movie']
+        status_message = StatusMessage(user_id=current_user.pk, message=message, movie_pk=movie)
+    else:
+        status_message = StatusMessage(user_id=current_user.pk, message=message)
+    status_message.save(return_obj=False)
+    return redirect(url_for('.profile', username=current_user.username))
 
 
 # Context Processors for template

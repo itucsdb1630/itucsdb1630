@@ -113,7 +113,7 @@ li.user-header {
   background-size: cover;
 }
 .profile-header {
-  top: 235px;
+  top: 27em;
   position: absolute;
   left: 50%;
   text-align: center;
@@ -197,6 +197,23 @@ li.user-header {
 }
 #latest-users {
   background-color: #222;
+}
+#profile-index {
+  position: relative;
+  top: -11em;
+}
+.status-messages-list {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+.status-message-text {
+  background-color: #CCC;
+  padding: 2em;
+  margin: 1em;
+  text-align: left;
+}
+.add-smsg-button {
+  margin-top: 3em;
 }
 .user-name {
   padding: 1em;

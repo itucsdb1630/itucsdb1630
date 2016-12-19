@@ -2,55 +2,95 @@
 {% block title %}{{ user }}{% endblock %}
 {% block content %}
 {% block containerclass %}{% endblock %}
-<div class="cover">
-  <img class="cover-image" src="{{ url_for('static', filename='images/cover1.jpg') }}" />
-</div>
-<div class="profile-header">
-  <div class="profile-photo">
-    <img class="profile-image" src="{{ user.email | gravatar }}"/>
+<section id="profile-index">
+  <div class="cover">
+    <img class="cover-image" src="{{ url_for('static', filename='images/cover1.jpg') }}" />
   </div>
-  <h1>{{ user }}</h1>
-  <h2>No badges yet</h2>
-  <div class="row text-center profile-stats">
-    <div class="col-xs-4">
-      <i class="fa fa-users"></i> <span class="followers-count">{{ user.followers }}</span>
+  <div class="profile-header">
+    <div class="profile-photo">
+      <img class="profile-image" src="{{ user.email | gravatar }}"/>
     </div>
-    <div class="col-xs-4">
-      <i class="fa fa-user-plus"></i> <span class="following-count">{{ user.following }}</span>
-    </div>
-    <div class="col-xs-4">
-      <i class="fa fa-share-alt"></i> <span class="share-count">0</span>
-    </div>
-  </div>
-  {% if current_user.pk == user.pk %}
-    <div class="pb-1">
-      <a href="{{ url_for('user.edit') }}" class="btn btn-primary">Edit Profile</a>
-      <a href="{{ url_for('user.delete') }}" class="btn btn-danger">Delete Profile</a>
-    </div>
-  {% else %}
-      <div class="pb-1">
-      {% if current_user.is_authenticated %}
-      {% if is_following(user.pk) %}
-        <a href="#" class="btn btn-danger unfollow-button">Unfollow</a>
-        <a href="#" class="hidden btn btn-primary follow-button">Follow</a>
-      {% else %}
-        <a href="#" class="btn btn-primary follow-button">Follow</a>
-        <a href="#" class="hidden btn btn-danger unfollow-button">Unfollow</a>
-      {% endif %}
-      <div class="alert alert-dismissible alert-danger error-alert">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <span class="follow-error"></span>
+    <h1>{{ user }}</h1>
+    <h2>No badges yet</h2>
+    <div class="row text-center profile-stats">
+      <div class="col-xs-4">
+        <i class="fa fa-users"></i> <span class="followers-count">{{ user.followers }}</span>
       </div>
-      {% endif %}
+      <div class="col-xs-4">
+        <i class="fa fa-user-plus"></i> <span class="following-count">{{ user.following }}</span>
+      </div>
+      <div class="col-xs-4">
+        <i class="fa fa-share-alt"></i> <span class="share-count">0</span>
+      </div>
     </div>
-  {% endif %}
-</div>
-<div class="container profile-container">
-  <hr/>
-  Status Messages
-</div>
+    {% if current_user.pk == user.pk %}
+      <div class="pb-1">
+        <a href="{{ url_for('user.edit') }}" class="btn btn-primary">Edit Profile</a>
+        <a href="{{ url_for('user.delete') }}" class="btn btn-danger">Delete Profile</a>
+      </div>
+    {% else %}
+        <div class="pb-1">
+        {% if current_user.is_authenticated %}
+        {% if is_following(user.pk) %}
+          <a href="#" class="btn btn-danger unfollow-button">Unfollow</a>
+          <a href="#" class="hidden btn btn-primary follow-button">Follow</a>
+        {% else %}
+          <a href="#" class="btn btn-primary follow-button">Follow</a>
+          <a href="#" class="hidden btn btn-danger unfollow-button">Unfollow</a>
+        {% endif %}
+        <div class="alert alert-dismissible alert-danger error-alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <span class="follow-error"></span>
+        </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+<section id="status-message-index" class="grey-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2 class="section-heading">Status Messages</h2>
+      </div>
+    </div>
+    {% if user == current_user %}
+    <div class="row new-status-message text-center">
+      <form action="{{ url_for('user.statusmessages') }}" method="POST" id="status-message-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="col-md-9">
+          <textarea class="form-control" rows="3" id="message-input" name="message" maxlength="140"></textarea>
+        </div>
+        <div class="col-md-3">
+          <input type="submit" class="btn btn-primary add-smsg-button" value="Add Message">
+        </div>
+      </form>
+    </div>
+    {% endif %}
+    <div class="row status-messages-list text-center">
+      {% for message in statusmessages %}
+      <div class="col-md-12 status-message-text">
+        <div class="row">
+          <div class="col-md-12 message-timestamp">
+            <span class="datetime">{{ message.added_at }}</span>
+          </div>
+          <div class="col-md-12 message-content">
+            {{ message.message }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endblock %}
 {% block extra_js %}
+<script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script>
+  $('.datetime').each(function(index) {
+    $(this).text(moment($(this).text()).fromNow());
+  })
+</script>
 <script>
     var csrftoken = "{{ csrf_token() }}";
     var follow_counter = $('.followers-count');

@@ -16,6 +16,16 @@ class Director(object):
         self.movie_pk = movie_pk
         self.celebrity_pk = celebrity_pk
 
+    @property
+    def celebrity(self):
+        from lightmdb.models import Celebrity
+        return Celebrity.get(pk=self.celebrity_pk)
+
+    @property
+    def movie(self):
+        from lightmdb.models import Movie
+        return Movie.get(pk=self.movie_pk)
+
     def get_id(self):
         return str(self.pk)
 
