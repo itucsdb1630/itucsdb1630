@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, redirect, url_for, render_template, current_app, request
+from flask import Blueprint,flash, abort, redirect, url_for, render_template, current_app, request
 from flask_login import login_required, current_user
 from lightmdb.models import Playlist
 from lightmdb.forms import PlaylistForm
@@ -29,6 +29,27 @@ def playlists(pk):
     if _playlist:
         _movies = Playlist_Movie.get_by_playlist(_playlist.pk)
     return render_template('playlist/playlist.html', movies = _movies, playlist = _playlist)
+
+
+@playlist.route("/delete/<pk>", methods=["GET","POST"])
+@login_required
+def delete_movie(pk):
+    _playlist = Playlist.get(pk)
+    if not _playlist:
+        abort(404, {'message': 'Movie not found.'})
+    _playlist.delete()
+    flash("Movie deleted!")
+    return redirect("/")
+
+@playlist.route("/remove/<pk>/<m_pk>", methods=["GET","POST"])
+@login_required
+def remove_movie(pk,m_pk):
+    _playlist_movie = Playlist_Movie.get_by_list_movie(pk,m_pk)
+    if not _playlist_movie:
+        abort(404, {'message': 'Movie not found.'})
+        _playlist_movie.delete()
+    flash("Movie deleted!")
+    return redirect("/")
 
 
 @playlist.route("/")

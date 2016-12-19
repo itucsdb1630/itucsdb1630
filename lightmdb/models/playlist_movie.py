@@ -1,5 +1,5 @@
 from flask import current_app
-from lightmdb.models import Movie
+from lightmdb.models import Movie, Playlist
 
 def get_database():
     from lightmdb import get_db
@@ -29,6 +29,19 @@ class Playlist_Movie():
         if playlist_movie:
             return Playlist_Movie(**playlist_movie[0])
         return None
+
+
+    @classmethod
+    def get_by_list_movie(cls,movie_id=None,playlist_id=None):
+        if not (movie_id and playlist_id):
+            return None
+        db = get_database()
+        cursor = db.cursor
+        cursor.execute(
+            "SELECT * FROM {table} WHERE playlist_id=%(playlist_id)s AND movie_id=%(movie_id)".format(table=cls.TABLE_NAME),
+            {'playlist_id': playlist_id,'movie_id': movie_id}
+        )
+
 
     @classmethod
     def get_by_playlist(cls, playlist_id=None):
