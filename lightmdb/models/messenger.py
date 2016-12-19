@@ -28,7 +28,7 @@ class Messenger:
         return data
 
     @classmethod
-    def get(cls, sender_pk=None, receiver_pk=None, time_stamp=None):
+    def get(cls, sender_pk=None, receiver_pk=None, time_stamp=None, pk=None):
         db = get_database()
         cursor = db.cursor
         if sender_pk and receiver_pk and time_stamp:
@@ -43,8 +43,13 @@ class Messenger:
                     table=cls.TABLE_NAME),
                 {'sender_pk': sender_pk, 'receiver_pk': receiver_pk}
             )
+        elif pk:
+            cursor.execute("SELECT * FROM {table} WHERE id=%(pk)s".format(table=cls.TABLE_NAME), {'pk': pk})
+            message = db.fetch_execution(cursor)
+            return message[0]
         else:
             return None
+
         messages = db.fetch_execution(cursor)
 
         if sender_pk and receiver_pk and time_stamp:
@@ -74,6 +79,16 @@ class Messenger:
     def save(self):
         db = get_database()
         data = self.values()
+        message = None
+        if self.pk:
+            message = self.get(pk=self.pk)
+        if message:
+            message.message = self.message
+            query = "UPDATE {table}" \
+                    "SET (message) " \
+                    "WHERE id=(pk) VALUES (%(message)s, %(pk)s)".format(table=self.TABLE_NAME)
+            db.cursor.execute(query, dict(data))
+            return self.get(pk=self.pk)
         del data['pk']
         del data['time_stamp']
         query = "INSERT INTO {table} " \
@@ -81,6 +96,7 @@ class Messenger:
                 "VALUES" \
                 "(%(sender_pk)s, %(receiver_pk)s, %(message)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
+        return self.get(pk=self.pk)
 
     @classmethod
     def __delete__(cls, pk=None):

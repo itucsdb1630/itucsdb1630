@@ -53,10 +53,7 @@
                                                 <small class="pull-right text-muted">
                                                     <span class="glyphicon glyphicon-time">
                                                     </span>
-                                                    {{ message.time_stamp }}&nbsp;|&nbsp;
-                                                     <a href="{{ url_for('messenger.delete_message', message_pk=message.pk, pk=receiver.pk) }}">
-                                                         <i>delete</i>
-                                                     </a>
+                                                    {{ message.time_stamp }}
                                                 </small>
                                             </div>
                                             <p>
@@ -72,6 +69,10 @@
                                         <div class="chat-body clearfix">
                                             <div class="header">
                                                 <small class=" text-muted">
+                                                     <a href="{{ url_for('messenger.update_message', message_pk=message.pk, pk=receiver.pk) }}">
+                                                         <i>update</i>
+                                                     </a>
+                                                    &nbsp;|&nbsp;
                                                      <a href="{{ url_for('messenger.delete_message', message_pk=message.pk, pk=receiver.pk) }}">
                                                          <i>delete</i>
                                                      </a>
@@ -94,16 +95,29 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                        {% if update_message is none %}
                             <form method='post' action="/messenger/sendmessage/{{ pk }}/">
+                        {% else %}
+                            <form method='post' action="/messenger/updatedmessage/{{ pk }}/{{ message_pk }}/">
+                        {% endif %}
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                                 <div class="panel-footer">
                                     <div class="input-group">
+                                        {% if update_message is none %}
                                             <input id="btn-input" name="message" type="text" class="form-control input-sm" placeholder="Type your message here..."/>
                                             <span class="input-group-btn">
                                                 <button href="{{ url_for('messenger.send_message', pk = pk) }}" class="btn btn-info btn-sm" id="btn-chat">
                                                     Send
                                                 </button>
                                             </span>
+                                        {% else %}
+                                            <input id="btn-input" name="message" type="text" class="form-control input-sm" placeholder="Type your message here..." value="{{ update_message.message }}"/>
+                                            <span class="input-group-btn">
+                                                <button href="{{ url_for('messenger.updated_message', pk = pk, message_pk = update_message.pk) }}" class="btn btn-info btn-sm" id="btn-chat">
+                                                    Update
+                                                </button>
+                                            </span>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </form>
