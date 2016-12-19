@@ -48,7 +48,7 @@ def remove_movie(pk,m_pk):
     if not _playlist_movie:
         abort(404, {'message': 'Movie not found.'})
         _playlist_movie.delete()
-    flash("Movie deleted!")
+    flash("Movie removed!")
     return redirect("/")
 
 
