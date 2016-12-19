@@ -68,6 +68,9 @@ li.user-header {
     background-color: #1a242f;
     padding: 0px;
 }
+.footer-links > li {
+  font-weight: bold;
+}
 .user-body > .row {
   font-size: 10px;
 }
@@ -228,6 +231,11 @@ li.user-header {
 #search-movies {
   padding-right: 5em;
   padding-left: 5em;
+}
+.privacy-text {
+  background-color: #FFF;
+  padding: 2em;
+  border-radius: 1em;
 }
 .user-footer > div > a {
   color: #FFFFFF !important;

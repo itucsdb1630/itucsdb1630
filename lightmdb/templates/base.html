@@ -25,17 +25,14 @@
              <li class="hidden">
                 <a href="#page-top"></a>
             </li>
-              <!-- <li class="active"><a href="#">Current Link <span class="sr-only">(current)</span></a></li> -->
               <!--<li><a class="page-scroll" href="#">Categories</a></li>-->
-              <!--<li><a class="page-scroll" href="{{ url_for('movies.add_movie') }}">Add a Movie</a></li>-->
               <li><a class="page-scroll" href="{{ url_for('toplist.toplists') }}">Toplists</a></li>
-              <!--<li><a class="page-scroll" href="{{ url_for('playlist.add_playlist') }}">Add a Playlist</a></li>-->
-              <!--<li><a class="page-scroll" href="{{ url_for('contactus.contact') }}">Contact</a></li>-->
-              <!--<li><a class="page-scroll" href="{{ url_for('frontend.privacy') }}">Privacy Policy</a></li>-->
               <li><a class="page-scroll" href="{{ url_for('playlist.playlists_index') }}">Playlists</a></li>
               {% if current_user.is_authenticated %}
-                <!--<li><a class="page-scroll" href="{{ url_for('contactus.contact_admin') }}">Contact Admin</a></li>-->
-                <li><a class="page-scroll" href="{{ url_for('messenger.main') }}">Messenger</a></li>
+              <li><a class="page-scroll" href="{{ url_for('messenger.main') }}">Messenger</a></li>
+              {% endif %}
+              {% if current_user.is_staff %}
+              <li><a class="page-scroll" href="{{ url_for('admin.index') }}">Admin</a></li>
               {% endif %}
               {% if current_user.is_authenticated %}
               <li class="dropdown user user-menu">
@@ -96,6 +93,30 @@
 </nav>
 {% block content %}{% endblock %}
 
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <span class="copyright">Copyright &copy; 2016 LightMDB</span>
+      </div>
+      <div class="col-md-4">
+        <ul class="list-inline social-buttons">
+          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+          <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <ul class="list-inline quicklinks footer-links">
+          <li><a href="{{ url_for('frontend.privacy') }}">Privacy Policy</a>
+          </li>
+          <li><a href="{{ url_for('contactus.contact') }}">Contact US</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
 <!-- Le Scripts -->
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
