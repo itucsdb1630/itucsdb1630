@@ -1,15 +1,92 @@
 {% extends "base.html" %}
-{%  block title %}{{ playlist.name }}{%  endblock %}
+{%  block title %}{{ playlist.name }}{% endblock %}
 
 {% block content %}
+<section id="movie-index" class="grey-section">
+<!--
 <a class="btn btn-sm btn-danger" href="{{ url_for('movies.delete_movie',pk=movie.pk)}}" role="button">Delete</a>
+-->
+{{% if movies %}}
+    {{% for movie in movies%}}
+<div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <img src="{{ movie.cover }}" alt="{{ movie.title }}">
+        <div class="row text-center">
+          <div class="col-md-12 movie-ratings">
+            <!-- Buttons: Watched, rating and etc -->
+            <div class="imdb-rating">
+              <i class="fa fa-imdb"></i> <span>{{ movie.imdb_score }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="movie-title"><h1>{{ movie.title }}</h1></div>
+          </div>
+          <div class="col-md-12">
+            <div class="movie-synopsis"><i>{{ movie.synopsis }}</i></div>
+          </div>
+          <div class="col-md-12">
+            <div class="movie-rating">
+              <fieldset class="rating">
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label class = "full" for="star3" title="Awesome"></label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label class = "full" for="star2" title="Good"></label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label class = "full" for="star1" title="Sucks"></label>
+              </fieldset>
+            </div>
+          </div>
+          <div class="col-md-12 movie-infos">
+            <span><i class="fa fa-certificate"></i> {{ movie.certification }}</span>
+            {% if movie.runtime %}
+            <span><i class="fa fa-film"></i> {{ (movie.runtime / 60)|int }} minutes</span>
+            {% endif %}
+            {% if movie.year %}
+            <span><i class="fa fa-ticket"></i> {{ movie.year }}</span>
+            {% endif %}
+          </div>
+          {% if current_user.is_staff %}
+          <div class="col-md-12 movie-infos">
+            <span><a href="{{ url_for('movies.delete_movie', pk=movie.pk) }}" class="btn btn-danger">Delete</a></span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Directors</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+              {% for director in movie.directors %}
+                <li>{{ director.celebrity.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Cast</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+              {% for member in movie.cast %}
+                <li>{{ member.celebrity.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-{{% for item in movies%}}
-<div>
-<div>
-
-</div>
-</div>
-{{% endfor %}}
-
+    {{% endfor %}}
+{{% endif %}}
+</section>
 {% endblock %}
