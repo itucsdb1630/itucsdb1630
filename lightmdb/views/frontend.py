@@ -11,7 +11,7 @@ frontend = Blueprint('frontend', __name__)
 @frontend.route("/")
 def index():
     last_users = User.filter(limit=12, deleted=False)
-    top_movies = Movie.top_movies(limit=12)
+    top_movies = Movie.top_movies(limit=24)
     data = {
         'last_users': last_users,
         'top_movies': top_movies
