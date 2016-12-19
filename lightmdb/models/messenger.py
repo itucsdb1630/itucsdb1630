@@ -46,7 +46,7 @@ class Messenger:
         elif pk:
             cursor.execute("SELECT * FROM {table} WHERE id=%(pk)s".format(table=cls.TABLE_NAME), {'pk': pk})
             message = db.fetch_execution(cursor)
-            return message[0]
+            return Messenger(**message[0])
         else:
             return None
 
@@ -83,11 +83,8 @@ class Messenger:
         if self.pk:
             message = self.get(pk=self.pk)
         if message:
-            message.message = self.message
-            query = "UPDATE {table}" \
-                    "SET (message) " \
-                    "WHERE id=(pk) VALUES (%(message)s, %(pk)s)".format(table=self.TABLE_NAME)
-            db.cursor.execute(query, dict(data))
+            query = "UPDATE {table} SET message = %(message)s WHERE id = %(pk)s".format(table=self.TABLE_NAME)
+            db.cursor.execute(query, {'pk': message.pk, 'message': self.message})
             return self.get(pk=self.pk)
         del data['pk']
         del data['time_stamp']

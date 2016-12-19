@@ -75,7 +75,7 @@ def update_message(message_pk, pk):
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=pk)
     user_list = current_user.friendlist
     receiver = User.get(pk=pk)
-    return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver, update_message=update_message)
+    return render_template('messenger/messenger.html', message_pk=message_pk, user_list=user_list, messages=messages, receiver=receiver, update_message=update_message)
 
 
 @messenger.teardown_request
