@@ -19,7 +19,7 @@ INSERT INTO users (
   ('elonmusk', 'elonmusk@lightmdb.org', 'Elon Musk', FALSE),
   ('thor', 'thorodinson@lightmdb.org', 'Thor Odinson', FALSE);
 
-DROP TABLE IF EXISTS user_followers CASCADE;
+DROP TABLE IF EXISTS user_followers;
 CREATE TABLE user_followers (
   id            SERIAL PRIMARY KEY,
   follower_id   INT NOT NULL,
@@ -36,6 +36,15 @@ ALTER TABLE ONLY user_followers
 
 INSERT INTO user_followers (follower_id, following_id) VALUES (2, 3), (3, 2);
 --@TODO handle it in init code, as serial id fails when using id to add users.
+
+DROP TABLE IF EXISTS status_messages;
+CREATE TABLE status_messages (
+  id        SERIAL PRIMARY KEY,
+  user_id   INT NOT NULL,
+  movie_id  INT,
+  message   varchar(140),
+  added_at  timestamp
+);
 
 DROP TABLE IF EXISTS user_messages CASCADE;
 CREATE TABLE user_messages (
@@ -56,7 +65,7 @@ INSERT INTO user_messages (
 DROP TABLE IF EXISTS movies CASCADE;
 CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
-  title varchar(200) UNIQUE NOT NULL,
+  title varchar(200) NOT NULL,
   synopsis varchar(254) NOT NULL,
   plot TEXT,
   year INT,
@@ -97,15 +106,16 @@ CREATE TABLE celebrities(
 DROP TABLE IF EXISTS casting CASCADE;
 CREATE TABLE casting(
   id SERIAL PRIMARY KEY,
-  movie_pk int,
-  celebrity_pk int
+  movie_pk int NOT NULL,
+  celebrity_pk int NOT NULL,
+  role varchar(254)
 );
 
 DROP TABLE IF EXISTS directors CASCADE;
 CREATE TABLE directors(
   id SERIAL PRIMARY KEY,
-  movie_pk int,
-  celebrity_pk int
+  movie_pk int NOT NULL,
+  celebrity_pk int NOT NULL
 );
 
 CREATE INDEX cast_celebrity_index ON casting USING btree (celebrity_pk);

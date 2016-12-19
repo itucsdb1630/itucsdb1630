@@ -1,46 +1,53 @@
 {% extends "base.html" %}
 {% block title %}Movie Search{% endblock %}
 {% block content %}
-<div class="row">
-  {% for movie in movies %}
-    <div class="col-md-12 movie">
-      <div class="col-md-3">
-        <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
-          <img src="{{ movie.poster_url }}" alt="Movie Poster" width="256px">
-        </a>
-      </div>
-      <div class="col-md-9">
-        <div class="row movie-details">
-          <div class="col-md-12">
-            {{ movie.title }} ({{ movie.year }})
-          </div>
-          <div class="col-md-12">
-            IMDB: {{ movie.rating }} /
-            {% if movie.runtime %}
-            {{ (movie.runtime / 60)|int }} minutes
-            {% endif %}
-          </div>
-          <div class="col-md-12">
-            <i>{{ movie.tagline }}</i><br/>
-            {{ movie.plot_outline }}
-          </div>
-          <div class="col-md-12">
-            {% for tag in movie.genres %}
-            <div class="tag">{{ tag }}</div>
-            {% endfor %}
-          </div>
-          <div class="col-md-12">
-            <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
-              <button class="btn btn-primary">
-                <i class="fa fa-film"></i> View Details
-              </button>
-            </a>
+<section id="search-movies">
+  <div class="row">
+    {% for movie in movies %}
+      <div class="col-md-12 movie">
+        <div class="col-md-3">
+          <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
+            <img src="{{ movie.poster_url }}" alt="Movie Poster" width="256px">
+          </a>
+        </div>
+        <div class="col-md-9">
+          <div class="row movie-details">
+            <div class="col-md-12">
+              {{ movie.title }} ({{ movie.year }})
+            </div>
+            <div class="col-md-12">
+              IMDB: {% if movie.rating %}{{ movie.rating }}{% else %}-{% endif %} /
+              {% if movie.certification %}{{ movie.certification }} /{% endif %}
+              {% if movie.runtime %}{{ (movie.runtime / 60)|int }}{% else %}-{% endif %} minutes
+            </div>
+            <div class="col-md-12">
+              {% if movie.tagline %}
+                <i>{{ movie.tagline }}</i><br/>
+              {% endif %}
+              {% if movie.plot_outline %}
+              {{ movie.plot_outline }}
+              {% endif %}
+            </div>
+            <div class="col-md-12">
+              {% if movie.genres %}
+              {% for tag in movie.genres %}
+              <div class="tag">{{ tag }}</div>
+              {% endfor %}
+              {% endif %}
+            </div>
+            <div class="col-md-12 view-movie-button">
+              <a href="{{ url_for('movies.movie', pk=movie.imdb_id) }}">
+                <button class="btn btn-primary">
+                  <i class="fa fa-film"></i> View Details
+                </button>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}
 {% block extra_js %}
 <script>

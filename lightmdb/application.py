@@ -29,6 +29,7 @@ DEFAULT_DSN = "user='vagrant' password='vagrant' host='localhost' port=54321 dbn
 DEFAULT_BLUEPRINTS = (
     # Add blueprints here
     (views.frontend, ""),
+    (views.admin, "/admin"),
     (views.user, "/profile"),
     (views.messenger, "/messenger"),
     (views.contactus, "/contact"),

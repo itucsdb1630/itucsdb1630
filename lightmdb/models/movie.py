@@ -30,6 +30,16 @@ class Movie(object):
         self.imdb_pk = imdb_pk
         self.imdb_score = imdb_score
 
+    @property
+    def directors(self):
+        from lightmdb.models import Director
+        return Director.filter(movie_pk=self.pk)
+
+    @property
+    def cast(self):
+        from lightmdb.models import Casting
+        return Casting.filter(movie_pk=self.pk)
+
     def get_id(self):
         return str(self.pk)
 
@@ -54,7 +64,7 @@ class Movie(object):
         return data
 
     @classmethod
-    def get(cls, pk=None, title=None, imdb_pk=None):
+    def get(cls, pk=None, imdb_pk=None):
         """Get movie by identifier.
 
         Usage: Movie.get(title)
@@ -66,11 +76,6 @@ class Movie(object):
             cursor.execute(
                 "SELECT * FROM {table} WHERE id=%(id)s".format(table=cls.TABLE_NAME),
                 {'id': pk}
-            )
-        elif title:
-            cursor.execute(
-                "SELECT * FROM {table} WHERE title=%(title)s".format(table=cls.TABLE_NAME),
-                {'title': title}
             )
         elif imdb_pk:
             cursor.execute(
@@ -109,13 +114,12 @@ class Movie(object):
         cursor.execute(query, {'id': self.pk})
         db.commit()
 
-    def save(self):
+    def save(self, return_obj=True):
         db = get_database()
         data = self.values()
+        movie = None
         if self.pk:
             movie = self.get(pk=self.pk)
-        else:
-            movie = self.get(title=self.title)
         if movie:
             # update old movie
             old_data = movie.values()
@@ -145,6 +149,30 @@ class Movie(object):
                 "(%(title)s, %(synopsis)s, %(plot)s, %(year)s, %(runtime)s, %(votes)s, %(score)s, " \
                 "%(rewatchability_count)s, %(rewatchability)s, %(cover)s, %(trailer)s, %(certification)s, " \
                 "%(imdb_pk)s, %(imdb_score)s)".format(table=self.TABLE_NAME)
-        db.cursor.execute(query, dict(data))
-        db.commit()
-        return self.get(title=self.title)
+        if return_obj:
+            query += " RETURNING id"
+        cursor = db.cursor
+        cursor.execute(query, dict(data))
+        if return_obj:
+            new_row_pk = cursor.fetchone()[0]
+            return self.get(pk=new_row_pk)
+        # db.commit()
+        return True
+
+    @classmethod
+    def top_movies(cls, limit=100, **kwargs):
+        db = get_database()
+        cursor = db.cursor
+        filter_data = {}
+        query = "SELECT * FROM " + cls.TABLE_NAME
+        if kwargs:
+            filter_query, filter_data = db.where_builder(kwargs)
+            query += " WHERE " + filter_query
+        query += " ORDER BY score DESC, imdb_score DESC "
+        query += " LIMIT " + str(limit)
+        cursor.execute(query, filter_data)
+        movies = db.fetch_execution(cursor)
+        result = []
+        for movie in movies:
+            result.append(Movie(**movie))
+        return result
