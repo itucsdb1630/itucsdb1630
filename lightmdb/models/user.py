@@ -187,6 +187,7 @@ class User(UserMixin):
         data = self.values()
         # use filter for django as it raises exception instead of None return
         user = self.get(username=self.username)
+        
         if user:
             # update old user
             old_data = user.values()
