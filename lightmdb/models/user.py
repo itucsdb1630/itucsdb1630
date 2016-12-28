@@ -3,6 +3,8 @@ from flask_login import UserMixin
 from collections import OrderedDict
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from lightmdb.models.movie import Movie
+
 
 def get_database():
     from lightmdb import get_db
@@ -77,10 +79,11 @@ class User(UserMixin):
             table="movies"),
             {'pk': self.pk}
         )
-        result = cursor.fetchone()
-        if result:
-            return result
-        return None
+        movies = cursor.fetchone()
+        result = []
+        for movie in movies:
+            result.append(Movie(**movie))
+        return result
 
     def get_id(self):
         return str(self.pk)

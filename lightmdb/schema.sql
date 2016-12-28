@@ -134,7 +134,7 @@ CREATE TABLE playlist_movies(
   ordering INT --order is a reserved keyword
 );
 
-DROP TABLE IF EXISTS watched_movies CASCADE;
+DROP TABLE IF EXISTS watched_movies;
 CREATE TABLE watched_movies (
   id SERIAL PRIMARY KEY ,
   user_pk INT,

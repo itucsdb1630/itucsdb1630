@@ -28,21 +28,17 @@ class Messenger:
         return data
 
     @classmethod
-    def get(cls, sender_pk=None, receiver_pk=None, time_stamp=None, pk=None):
+    def get(cls, sender_pk=None, receiver_pk=None, pk=None):
         db = get_database()
         cursor = db.cursor
-        if sender_pk and receiver_pk and time_stamp:
-            cursor.execute(
-                "SELECT * FROM {table} WHERE sender_pk=%(sender_pk)s AND receiver_pk=%(receiver_pk)s AND time_stamp>%(time_stamp)s".format(
-                    table=cls.TABLE_NAME),
-                {'sender_pk': sender_pk, 'receiver_pk': receiver_pk, 'time_stamp': time_stamp}
-            )
-        elif sender_pk and receiver_pk:
+        messages = None
+        if sender_pk and receiver_pk:
             cursor.execute(
                 "SELECT * FROM {table} WHERE sender_pk=%(sender_pk)s AND receiver_pk=%(receiver_pk)s".format(
                     table=cls.TABLE_NAME),
                 {'sender_pk': sender_pk, 'receiver_pk': receiver_pk}
             )
+            messages = db.fetch_execution(cursor)
         elif pk:
             cursor.execute("SELECT * FROM {table} WHERE id=%(pk)s".format(table=cls.TABLE_NAME), {'pk': pk})
             message = db.fetch_execution(cursor)
@@ -50,27 +46,22 @@ class Messenger:
         else:
             return None
 
-        messages = db.fetch_execution(cursor)
 
-        if sender_pk and receiver_pk and time_stamp:
-            cursor.execute(
-                "SELECT * FROM {table} WHERE sender_pk=%(receiver_pk)s AND receiver_pk=%(sender_pk)s AND time_stamp>%(time_stamp)s".format(
-                    table=cls.TABLE_NAME),
-                {'sender_pk': sender_pk, 'receiver_pk': receiver_pk, 'time_stamp': time_stamp}
-            )
-        elif sender_pk and receiver_pk:
+
+        if sender_pk and receiver_pk:
             cursor.execute(
                 "SELECT * FROM {table} WHERE sender_pk=%(receiver_pk)s AND receiver_pk=%(sender_pk)s".format(
                     table=cls.TABLE_NAME),
                 {'sender_pk': sender_pk, 'receiver_pk': receiver_pk}
             )
+            messages += db.fetch_execution(cursor)
         else:
             return None
 
         def get_key(custom):
             return custom['time_stamp']
 
-        messages += db.fetch_execution(cursor)
+
         messages = sorted(messages, key=get_key)
         if messages:
             return messages
@@ -93,7 +84,7 @@ class Messenger:
                 "VALUES" \
                 "(%(sender_pk)s, %(receiver_pk)s, %(message)s)".format(table=self.TABLE_NAME)
         db.cursor.execute(query, dict(data))
-        return self.get(pk=self.pk)
+        return self.get()
 
     @classmethod
     def __delete__(cls, pk=None):
