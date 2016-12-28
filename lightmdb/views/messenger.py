@@ -48,12 +48,13 @@ def send_message(pk):
 @login_required
 def updated_message(pk, message_pk):
     new_message = request.form.get("message", "")
-    update_message = Messenger.get(pk=message_pk)
-    update_message.message = new_message
-    update_message.save()
+    updated_message = Messenger.get(pk=message_pk)
+    updated_message.message = new_message
+    updated_message.save()
     messages = Messenger.get(sender_pk=current_user.pk, receiver_pk=pk)
     user_list = current_user.friendlist
     receiver = User.get(pk=pk)
+    update_message = None
     return render_template('messenger/messenger.html', user_list=user_list, messages=messages, receiver=receiver, update_message=update_message)
 
 
