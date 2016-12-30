@@ -1,6 +1,12 @@
 Parts Implemented by Seda Bilgin
 ================================
 
+.. figure:: seda/uml.JPG
+   :scale: 80 %
+   :alt: Contact Admin - update
+   :align: center
+   
+
 #########
 ContactUS
 #########
@@ -70,7 +76,8 @@ Methods
         try:
             db = get_database()
             cursor = db.cursor
-            cursor.execute("SELECT title,content,email,phone,status,sendtime FROM {table} WHERE id=%s".format(table=self.TABLE_NAME),[self.cid])
+            cursor.execute("SELECT title,content,email,phone,status,sendtime FROM {table} "+
+	    		"WHERE id=%s".format(table=self.TABLE_NAME),[self.cid])
             contact_info= cursor.fetchone()
             if contact_info:
                 return contact_info
@@ -99,7 +106,8 @@ Methods
             try:
                 db = get_database()
                 cursor = db.cursor
-                cursor.execute("SELECT id,title,content,email,phone,status,sendtime from contactUs where  "+where)
+                cursor.execute("SELECT id,title,content,email,phone,status,sendtime from"+
+			" contactUs where  "+where)
                 return cursor.fetchall()
             except:
                 return []
@@ -116,7 +124,9 @@ Methods
         try:
             db = get_database()
             cursor = db.cursor
-            cursor.execute("INSERT INTO {table} (title,content,email,phone) VALUES (%s,%s,%s,%s)".format(table=self.TABLE_NAME),[self.title,self.content,self.email,self.phone])
+            cursor.execute("INSERT INTO {table} (title,content,email,phone) VALUES"+
+	    	" (%s,%s,%s,%s)".format(table=self.TABLE_NAME),
+	    	[self.title,self.content,self.email,self.phone])
             cursor.close()
             db.commit()
             db.close()
@@ -137,7 +147,9 @@ Methods
             try:
                 db = get_database()
                 cursor = db.cursor
-                cursor.execute("UPDATE {table} SET status=%s WHERE id=%s".format(table=self.TABLE_NAME), [new_status,self.cid])
+                cursor.execute("UPDATE {table} SET status=%s WHERE"+
+			" id=%s".format(table=self.TABLE_NAME),
+			[new_status,self.cid])
                 cursor.close()
                 db.commit()
                 db.close()
@@ -155,8 +167,10 @@ Methods
     def delete_message(self):
         db = get_database()
         cursor = db.cursor
-        ##cursor.execute("UPDATE {table} SET deleted=1 WHERE id=%".format(table=self.TABLE_NAME), [self.cid])
-        cursor.execute("DELETE FROM {table} WHERE id=%s".format(table=self.TABLE_NAME), [self.cid])
+        ##cursor.execute("UPDATE {table} SET deleted=1 WHERE 
+	##	id=%".format(table=self.TABLE_NAME), [self.cid])
+        cursor.execute("DELETE FROM {table} WHERE id=%s".format(table=self.TABLE_NAME),
+		[self.cid])
         cursor.close()
         db.commit()
         db.close()
@@ -267,7 +281,9 @@ If page posted data has 'update',  ContactMessage object will be created by id a
 					comment=ContactComment(pk=request.form['commentUpdate'])
 					comment.update_comment(request.form['comment'],send_mail)
 				else:
-					comment=ContactComment(pk_contact=message.cid,comment=request.form['comment'],send_mail=send_mail)
+					comment=ContactComment(pk_contact=message.cid,
+							comment=request.form['comment'],
+							send_mail=send_mail)
 					comment.save()
 			if 'delete' in request.form:
 				message = ContactMessage(request.form['delete'])
